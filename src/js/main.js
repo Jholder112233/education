@@ -1,220 +1,207 @@
 import { select, selectAll } from 'd3-selection'
 import { csvParse } from 'd3-dsv'
-import { scaleLinear } from 'd3-scale'
+import { scaleLinear, scaleSqrt } from 'd3-scale'
 import { axisLeft } from 'd3-axis'
 import { format } from 'd3-format'
+import { transition } from 'd3-transition'
+import { easeCubic, easeElasticOut, easeExpIn, easeBackOut, easeBounceOut, easePolyIn } from 'd3-ease' 
+import { packSiblings, packEnclose } from 'd3-hierarchy'
 import data from '../assets/data/countries.csv!text'
+import mainHTML from './text/main.html!text'
+import tableHTML from './text/table.html!text'
 
-const height = 1200;
-const width = 800;
-
-const topPadding = 50;
-
-const circleSize = 10;
-const circleGap = 1;
-
-const yearHeight = 20;
-
-const xDefaults = {
-  "primary": 100,
-  "lowerSecondary": 300,
-  "upperSecondary": 500
-}
+const padding = 2;
 
 export function init(el, context, config, mediator) {
   let parsedData = csvParse(data);
+  el.innerHTML = mainHTML;
   render(el, parsedData)
 }
 
-var scaleY = scaleLinear()
-  .domain([1970,2100])
-  .range([topPadding,height]);
-
-var axis = axisLeft(scaleY).tickFormat(format("d")).ticks(20);
-
-function render(el, dCountries) {
-  let svg = select(el).html("")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .style("overflow", "visible")
-    .style("margin-bottom", "100px");
-
-  svg.append("g")
-    .attr("transform", "translate(60,0)")
-    .call(axis);
-
-  svg.selectAll(".tick line")
-    .attr("x1", width)
-    .attr("stroke", "#bdbdbd");
-
-  svg.select(".domain")
-    .remove();
-
-  svg.selectAll("circle.primary")
-    .data(dCountries)
-    .enter()
-      .append("circle")
-      .attr("class", d => "flag flag-" + d.code)
-      .classed("primary", true)
-      .attr("cx", d => circleCoord(d, dCountries, "primary").x)
-      .attr("cy", d => circleCoord(d, dCountries, "primary").y)
-      .attr("r", circleSize/2)
-      .attr("data-country", d => d.country)
-      .style("fill", "#cc2b12")
-      .style("fill-opacity", "0.3")
-      .style("stroke", "#cc2b12")
-      .style("stroke-width", "1px");
-
-  svg.selectAll("circle.lowersec")
-    .data(dCountries)
-    .enter()
-      .append("circle")
-      .attr("class", d => "flag flag-" + d.code)
-      .classed("lowersec", true)
-      .attr("cx", d => circleCoord(d, dCountries, "lowerSecondary").x)
-      .attr("cy", d => circleCoord(d, dCountries, "lowerSecondary").y)
-      .attr("r", circleSize/2)
-      .attr("data-country", d => d.country)
-      .style("fill", "#cc2b12")
-      .style("fill-opacity", "0.3")
-      .style("stroke", "#cc2b12")
-      .style("stroke-width", "1px");
-
-  svg.selectAll("circle.uppersec")
-    .data(dCountries)
-    .enter()
-      .append("circle")
-      .attr("class", d => "flag flag-" + d.code)
-      .classed("uppersec", true)
-      .attr("cx", d => circleCoord(d, dCountries, "upperSecondary").x)
-      .attr("cy", d => circleCoord(d, dCountries, "upperSecondary").y)
-      .attr("r", circleSize/2)
-      .attr("data-country", d => d.country)
-      .style("fill", "#cc2b12")
-      .style("fill-opacity", "0.3")
-      .style("stroke", "#cc2b12")
-      .style("stroke-width", "1px");
-
-  svg.selectAll("circle")
-    .on("mouseover", function(d) {
-      let el = select(this);
-      let country = el.attr("data-country");
-
-      let circles = selectAll('circle[data-country="' + country + '"]')
-        .style("stroke", "#333")
-        .style("fill", "#333")
-        .classed("hover", true);
-
-      let primary = select('circle.primary[data-country="' + country + '"]');
-      let lowerSec = select('circle.lowersec[data-country="' + country + '"]');
-      let upperSec = select('circle.uppersec[data-country="' + country + '"]');
-
-      svg.append("line")
-        .style("stroke", "#767676")
-        .classed("hover", true)
-        .style("stroke-width", "1px")
-        .attr("x1", primary.attr("cx"))
-        .attr("x2", lowerSec.attr("cx"))
-        .attr("y1", primary.attr("cy"))
-        .attr("y2", lowerSec.attr("cy"));
-
-      svg.append("text")
-        .classed("hover", true)
-        .text(primary.attr("data-country"))
-        .attr("x", Number(primary.attr("cx")) + circleSize/2 + 2)
-        .attr("y", Number(primary.attr("cy")) + circleSize/2 - 1); 
-
-      svg.append("line")
-        .style("stroke", "#767676")
-        .classed("hover", true)
-        .style("stroke-width", "1px")
-        .attr("x1", upperSec.attr("cx"))
-        .attr("x2", lowerSec.attr("cx"))
-        .attr("y1", upperSec.attr("cy"))
-        .attr("y2", lowerSec.attr("cy"));
-
-    })
-    .on("mouseout", function(d) {
-      selectAll('circle.hover')
-        .style("fill", "#cc2b12")
-        .style("stroke", "#cc2b12")
-        .classed("hover", false);
-
-      selectAll('line.hover')
-        .remove();
-
-      selectAll('text.hover')
-        .remove();
-    });
+function incomeColour(incomeGroup) {
+  var colour;
+  switch(incomeGroup) {
+    case "High income":
+        colour = "#005689";
+        break;
+    case "Upper middle income":
+        colour = "#4bc6df";
+        break;
+    case "Lower middle income":
+        colour = "#ffbb00";
+        break;
+    case "Low income":
+        colour = "#c05303";
+        break;
+    default:
+        colour = "#767676";
+  }
+  return colour;
 }
 
-function isOdd(num) { return (num % 2) == 1;}
+// function incomeColour(incomeGroup) {
+//   var colour;
+//   switch(incomeGroup) {
+//     case "High income":
+//         colour = "rgb(57, 164, 216)";
+//         break;
+//     case "Upper middle income":
+//         colour = "rgb(138, 199, 205)";
+//         break;
+//     case "Lower middle income":
+//         colour = "rgb(253, 208, 158)";
+//         break;
+//     case "Low income":
+//         colour = "rgb(237, 61, 97)";
+//         break;
+//     default:
+//         colour = "#767676";
+//   }
+//   return colour;
+// }
 
-function circleCoord(countryData, data, column) {
-  function isEnough(arr, index) {
-    let total = arr.reduce((previousValue, currentValue) => {
-      return previousValue + currentValue;
+function render(el, data) {
+  let svgMet = select(".block-one .svg-one .svg-wrapper").append("svg")
+    .attr("width", 1260/2)
+    .attr("height", 500);
+
+  let svgNotMet = select(".block-one .svg-two .svg-wrapper").append("svg")
+    .attr("width", 1260/2)
+    .attr("height", 500);
+
+  let svgSDGMeet = select(".block-two .svg-one .svg-wrapper").append("svg")
+    .attr("width", 1260/2)
+    .attr("height", 600);
+
+  let svgSDGNotMeet = select(".block-two .svg-two .svg-wrapper").append("svg")
+    .attr("width", 1260/2)
+    .attr("height", 600);
+
+  let radiusScale = scaleSqrt()
+    .domain([100000,1371220000])
+    .range([5, 100]);
+
+  let mdgMet = data.filter((country) => {
+      return Number(country.primary) <= 2015;
+    }).map((country) => {
+      country.r = radiusScale(country.population);
+      return country;
     });
 
-    return total > index;
-  }
+  let mdgNotMet = data.filter((country) => {
+      return Number(country.primary) > 2015;
+    }).map((country) => {
+      country.r = radiusScale(country.population);
+      return country;
+    });
 
-  function whichRow(index, layout) {
-    var rowCount;
+  let sdgMeet = data.filter((country) => {
+      return Number(country.upperSecondary) <= 2030;
+    }).map((country) => {
+      country.r = radiusScale(country.population);
+      return country;
+    });
 
-    for(var i = 1; i < layout.length + 1; i++) {
-      if(!rowCount && isEnough(layout.slice(0, i), index)) {
-          rowCount = i;
-      }
-    }
+  let sdgNotMeet = data.filter((country) => {
+      return Number(country.upperSecondary) > 2030;
+    }).map((country) => {
+      country.r = radiusScale(country.population);
+      return country;
+    });
 
-    return rowCount;
-  }
+  // block 1
+  drawCircle(svgMet, mdgMet, "Met the MDG", select(".block-one .svg-one"));
+  drawCircle(svgNotMet, mdgNotMet, "Did not meet the MDG", select(".block-one .svg-two"));
 
-  function whichColumn(indexOfCountry, layout) {
-    let totalBeforeRow = layout.slice(0, whichRow(indexOfCountry, layout)).reduce((previousValue, currentValue) => {
-      return previousValue + currentValue;
-    }) - layout[whichRow(indexOfCountry, layout) - 1];
-
-    let indexInRow = indexOfCountry - totalBeforeRow;
-
-    return indexInRow;
-  }
-
-  let circlesAtSameYear = data.filter(country => {
-    return country[column] === countryData[column];
-  });
-
-  let numberOfCirclesAtSameYear = circlesAtSameYear.length;
-  let indexOfCountry = circlesAtSameYear.indexOf(countryData);
-  let layout = (layouts[numberOfCirclesAtSameYear]) ? layouts[numberOfCirclesAtSameYear] : [Math.ceil(numberOfCirclesAtSameYear/4),Math.ceil(numberOfCirclesAtSameYear/4),Math.ceil(numberOfCirclesAtSameYear/4),Math.ceil(numberOfCirclesAtSameYear/4)];
-
-  let xDefault = xDefaults[column];
-  let yDefault = scaleY(countryData[column]) - ((layout.length+1)*circleSize)/2;
-
-  let oddOffset = (!isOdd(whichRow(indexOfCountry, layout))) ? 0 : (circleSize+circleGap) / 2;
-
-  let x = xDefault + whichColumn(indexOfCountry, layout)*(circleSize+circleGap) + oddOffset;
-  let y = yDefault + whichRow(indexOfCountry, layout)*(circleSize);
-  
-  return {
-    "x": x,
-    "y": y
-  }
+  // block 2
+  drawCircle(svgSDGMeet, sdgMeet, "Forecast to meet the SDG", select(".block-two .svg-one"));
+  drawCircle(svgSDGNotMeet, sdgNotMeet, "Forecast not to meet the SDG", select(".block-two .svg-two"));
 }
 
-const layouts = {
-  1: [1],
-  2: [2],
-  3: [1, 2],
-  4: [2, 2],
-  5: [2, 3],
-  6: [2, 2, 2],
-  7: [2, 3, 2],
-  8: [3, 3, 2],
-  9: [3, 3, 3],
-  10: [4, 3, 3],
-  11: [4, 4, 3],
-  19: [6, 7, 6]
+function drawCircle(svg, data, title, el) {
+  let circles = packSiblings(data);
+  let bigCircle = packEnclose(circles);
+  let totalEl = el.select(".count");
+
+  let incomeElObj = {
+    "Low income": el.select(".low"),
+    "Lower middle income": el.select(".lm"),
+    "Upper middle income": el.select(".um"),
+    "High income": el.select(".high")
+  };
+
+  svg.append("g").append("circle")
+    .attr("cx", bigCircle.x )
+    .attr("cy", bigCircle.y )
+    .attr("r", bigCircle.r )
+    .style("fill", "#f6f6f6");
+    // .style("fill-opacity", "0.3"); 
+
+  svg.append("g").selectAll("circle")
+    .data(circles)
+    .enter().append("circle")
+      .classed("small-circle", true)
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .style("fill", (d) => {
+        return incomeColour(d.income);
+      })
+      .style("stroke", (d) => {
+        return incomeColour(d.income);
+      })
+      .style("fill-opacity", "0.2")
+      .style("stroke-width", "1px")
+      .attr("r", 0)
+      .transition()
+        .ease(easeElasticOut)
+        .delay(function(d, i) { return i * 25; })
+        .duration(1200)
+        .attr("r", (d, i) => {
+          setTimeout(() => {
+            let newCountTotal = Number(totalEl.html()) + 1;
+            if(d.income !== "Not classified") {
+              let newIncomeTotal = Number(incomeElObj[d.income].html()) + 1;
+              incomeElObj[d.income].html(newIncomeTotal);
+            }
+            totalEl.html(newCountTotal);
+          }, (i * 25));
+
+          return d.r - padding
+        });
+
+  svg.append("g").selectAll("text")
+    .data(circles)
+    .enter().append("text")
+      .classed("circle-label", true)
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("dy", "4")
+      .style("text-anchor", "middle")
+      .style("fill", (d) => {
+        return incomeColour(d.income);
+      })
+      .style("opacity", 0)
+      .text((d) => {
+        return d.code3;
+      })
+      .transition()
+        .delay(function(d, i) { return (i * 25) + 500; })
+        .duration(300)
+        .style("opacity", (d) => {
+          if(d.r > 12) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+
+  svg.append("text")
+    .text(title)
+    .attr("y", (svg.attr("height")/2) - bigCircle.r - 12)
+    .attr("x", svg.attr("width")/2)
+    .style("text-anchor", "middle");
+
+  //position groups
+  svg.selectAll("g")
+    .style("transform", "translate(" + svg.attr("width")/2 + "px," + svg.attr("height")/2 + "px)");
 }

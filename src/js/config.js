@@ -24,9 +24,12 @@ System.config({
     "core-js": "npm:core-js@1.2.6",
     "d3-axis": "npm:d3-axis@1.0.3",
     "d3-dsv": "npm:d3-dsv@1.0.1",
+    "d3-ease": "npm:d3-ease@1.0.1",
     "d3-format": "npm:d3-format@1.0.2",
+    "d3-hierarchy": "npm:d3-hierarchy@1.0.2",
     "d3-scale": "npm:d3-scale@1.0.3",
     "d3-selection": "npm:d3-selection@1.0.2",
+    "d3-transition": "npm:d3-transition@1.0.1",
     "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
     "json": "github:systemjs/plugin-json@0.1.2",
     "reqwest": "github:ded/reqwest@1.1.5",
@@ -89,6 +92,14 @@ System.config({
     },
     "npm:d3-time-format@2.0.2": {
       "d3-time": "npm:d3-time@1.0.2"
+    },
+    "npm:d3-transition@1.0.1": {
+      "d3-color": "npm:d3-color@1.0.1",
+      "d3-dispatch": "npm:d3-dispatch@1.0.1",
+      "d3-ease": "npm:d3-ease@1.0.1",
+      "d3-interpolate": "npm:d3-interpolate@1.1.1",
+      "d3-selection": "npm:d3-selection@1.0.2",
+      "d3-timer": "npm:d3-timer@1.0.2"
     },
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
