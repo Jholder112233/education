@@ -91,6 +91,61 @@ html, body,
 	}
 }
 
+.tooltip {
+	@include fs-textSans(2);
+	background-color: rgba(255, 255, 255, 1);
+	padding: 6px 5px;
+	border: 1px solid #eaeaea;
+	width: 220px;
+	pointer-events: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+
+	&:after, &:before {
+		top: 100%;
+		left: 50%;
+		border: solid transparent;
+		content: " ";
+		height: 0;
+		width: 0;
+		position: absolute;
+		pointer-events: none;
+	}
+
+	&:after {
+		border-color: rgba(255, 255, 255, 0);
+		border-top-color: #fff;
+		border-width: 5px;
+		margin-left: -5px;
+	}
+	&:before {
+		border-color: rgba(234, 234, 234, 0);
+		border-top-color: #eaeaea;
+		border-width: 6px;
+		margin-left: -6px;
+	}
+}
+
+.tooltip__country {
+	font-weight: 500;
+	display: block;
+}
+
+.tooltip__when {
+	font-size: 12px;
+	line-height: 15px;
+	font-weight: 300;
+	color: #767676;
+	display: block;
+
+	b {
+		color: #000;
+		font-weight: 500;
+	}
+}
+
 .tick text {
 	@include fs-textSans(2);
 }

@@ -1,4 +1,4 @@
-import { select, selectAll } from 'd3-selection'
+import { select, selectAll, mouse } from 'd3-selection'
 import { csvParse } from 'd3-dsv'
 import { scaleLinear, scaleSqrt } from 'd3-scale'
 import { axisLeft } from 'd3-axis'
@@ -79,7 +79,7 @@ function render(el, data) {
 
   let radiusScale = scaleSqrt()
     .domain([100000,1371220000])
-    .range([5, 100]);
+    .range([5, 95]);
 
   let mdgMet = data.filter((country) => {
       return Number(country.primary) <= 2015;
@@ -123,6 +123,8 @@ function drawCircle(svg, data, title, el) {
   let bigCircle = packEnclose(circles);
   let totalEl = el.select(".count");
 
+  let tooltip = select(".tooltip");
+
   let incomeElObj = {
     "Low income": el.select(".low"),
     "Lower middle income": el.select(".lm"),
@@ -140,6 +142,7 @@ function drawCircle(svg, data, title, el) {
   svg.append("g").selectAll("circle")
     .data(circles)
     .enter().append("circle")
+      .attr("class", (d,i) => { return "country " + d.code3; })
       .classed("small-circle", true)
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
@@ -152,6 +155,17 @@ function drawCircle(svg, data, title, el) {
       .style("fill-opacity", "0.2")
       .style("stroke-width", "1px")
       .attr("r", 0)
+      .on("mousemove", function(d) {
+        console.log(event.pageX, event.pageY);
+        tooltip.style("position", "absolute")
+          .style("display", "block")
+          .style("left", (event.pageX - 116) + "px")
+          .style("top", (event.pageY - 72) + "px")
+          .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">Achieved universal primary education in <b>${d.primary}</b>, before <b>66%</b> of the world</span>`);
+      })
+      .on("mouseout", function(d) {
+        tooltip.style("display", "none");
+      })
       .transition()
         .ease(easeElasticOut)
         .delay(function(d, i) { return i * 25; })
