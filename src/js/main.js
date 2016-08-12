@@ -60,6 +60,14 @@ function incomeColour(incomeGroup) {
 //   return colour;
 // }
 
+function calcBefore(country, data, attr) {
+  let beforeNumber = data.filter((row) => {
+    return Number(row[attr]) > Number(country[attr]);
+  }).length;
+
+  return ((beforeNumber/data.length) * 100).toFixed(1);
+}
+
 function render(el, data) {
   let svgMet = select(".block-one .svg-one .svg-wrapper").append("svg")
     .attr("width", 1260/2)
@@ -84,30 +92,38 @@ function render(el, data) {
   let mdgMet = data.filter((country) => {
       return Number(country.primary) <= 2015;
     }).map((country) => {
-      country.r = radiusScale(country.population);
-      return country;
+      let r = radiusScale(country.population);
+      let before = calcBefore(country, data, "primary");
+      let educationLevel = "universal primary education";
+      return {...country, r, before, educationLevel};
     });
 
   let mdgNotMet = data.filter((country) => {
       return Number(country.primary) > 2015;
     }).map((country) => {
-      country.r = radiusScale(country.population);
-      return country;
+      let r = radiusScale(country.population);
+      let before = calcBefore(country, data, "primary");
+      let educationLevel = "universal primary education";
+      return {...country, r, before, educationLevel};
     });
 
   let sdgMeet = data.filter((country) => {
       return Number(country.upperSecondary) <= 2030;
     }).map((country) => {
-      country.r = radiusScale(country.population);
-      return country;
+      let r = radiusScale(country.population);
+      let before = calcBefore(country, data, "upperSecondary");
+      let educationLevel = "universal secondary education";
+      return {...country, r, before, educationLevel};
     });
 
   let sdgNotMeet = data.filter((country) => {
       return Number(country.upperSecondary) > 2030;
     }).map((country) => {
-      country.r = radiusScale(country.population);
-      return country;
-    });
+      let r = radiusScale(country.population);
+      let before = calcBefore(country, data, "upperSecondary");
+      let educationLevel = "universal secondary education";
+      return {...country, r, before, educationLevel};
+    }); 
 
   // block 1
   drawCircle(svgMet, mdgMet, "Met the MDG", select(".block-one .svg-one"));
@@ -156,12 +172,15 @@ function drawCircle(svg, data, title, el) {
       .style("stroke-width", "1px")
       .attr("r", 0)
       .on("mousemove", function(d) {
-        console.log(event.pageX, event.pageY);
+        let year = (d.educationLevel === "universal secondary education") ? d.upperSecondary : d.primary;
+        let achieveMessage = (Number(year) > 2015) ? "Forecast to achieve" : "Achieved";
+        let verticalOffset = (Number(year) > 2015) ? event.pageY - 84 : event.pageY - 72;
+
         tooltip.style("position", "absolute")
           .style("display", "block")
           .style("left", (event.pageX - 116) + "px")
-          .style("top", (event.pageY - 72) + "px")
-          .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">Achieved universal primary education in <b>${d.primary}</b>, before <b>66%</b> of the world</span>`);
+          .style("top", verticalOffset + "px")
+          .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">${achieveMessage} ${d.educationLevel} in <b>${year}</b>, before <b>${d.before}%</b> of the world</span>`);
       })
       .on("mouseout", function(d) {
         tooltip.style("display", "none");
