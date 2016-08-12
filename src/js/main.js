@@ -65,7 +65,7 @@ function calcBefore(country, data, attr) {
     return Number(row[attr]) > Number(country[attr]);
   }).length;
 
-  return ((beforeNumber/data.length) * 100).toFixed(1);
+  return ((beforeNumber/(data.length-1)) * 100).toFixed(1);
 }
 
 function render(el, data) {
