@@ -14,7 +14,12 @@ html, body,
 		margin-bottom: 4px;
 	}
 
+	h2 {
+		@include fs-header(1);
+	}
+
 	.subheading {
+		@include fs-bodyCopy(2);
 		margin: 0;
 		color: #767676;
 	}
@@ -88,6 +93,10 @@ html, body,
 	.middle {
 		max-width: 620px;
 		margin: auto;
+
+		&.padding-top {
+			margin-top: 24px;
+		}
 	}
 }
 
@@ -148,6 +157,44 @@ html, body,
 
 .tick text {
 	@include fs-textSans(2);
+}
+
+.block-three {
+	.svg {
+		float: initial; 
+	}
+
+	.tick text {
+		fill: #767676;
+		@include fs-textSans(1);
+	}
+
+	text {
+		font-size: 13px;
+	}
+
+	.target-line-label {
+		@include fs-textSans(2);
+	}
+
+	.target-label {
+		@include fs-textSans(4);
+	}
+}
+
+.country-button {
+	display: inline-block;
+	padding: 0px 5px;
+	border-radius: 40px;
+
+	&.upper-middle-income {
+		background-color: rgba(75, 198, 223, 0.2);
+		border: 1px solid rgb(75, 198, 223);
+	}
+	&.lower-middle-income {
+		background-color: rgba(255, 187, 0, 0.2);
+		border: 1px solid rgb(255, 187, 0);
+	}
 }
 
 line.hover {
