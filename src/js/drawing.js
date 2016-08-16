@@ -1,11 +1,12 @@
 import { select, selectAll, mouse } from 'd3-selection'
 import { csvParse } from 'd3-dsv'
 import { scaleLinear, scaleSqrt } from 'd3-scale'
-import { axisTop, axisLeft } from 'd3-axis'
+import { axisTop, axisLeft, axisBottom } from 'd3-axis'
 import { format } from 'd3-format'
 import { transition } from 'd3-transition'
 import { easeCubic, easeElasticOut, easeExpIn, easeBackOut, easeBounceOut, easePolyIn } from 'd3-ease' 
 import { packSiblings, packEnclose } from 'd3-hierarchy'
+import { line } from 'd3-shape'
 
 export function incomeColour(incomeGroup) {
   var colour;
@@ -26,6 +27,20 @@ export function incomeColour(incomeGroup) {
         colour = "#767676";
   }
   return colour;
+}
+
+export function calcBefore(country, data, attr) {
+  let beforeNumber = data.filter((row) => {
+    return Number(row[attr]) > Number(country[attr]);
+  }).length;
+
+  return ((beforeNumber/(data.length-1)) * 100).toFixed(1);
+}
+
+export function calcTargetYears(country, attr, target) {
+  let years = country[attr] - target;
+
+  return years.toFixed(0);
 }
 
 
@@ -95,7 +110,7 @@ export function drawCircle(svg, data, title, el) {
 
         tooltip.style("position", "absolute")
           .style("display", "block")
-          .style("left", (event.pageX - 116) + "px")
+          .style("left", (event.pageX - 126) + "px")
           .style("top", verticalOffset + "px")
           .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">${achieveMessage} ${d.educationLevel} in <b>${year}</b>, before <b>${d.before}%</b> of the world</span>`);
       })
@@ -157,7 +172,7 @@ export function drawCircle(svg, data, title, el) {
 }
 
 
-export function drawBlockThree(svg, data) {
+export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear) {
   const margins = {
     left: 60,
     right: 0
@@ -168,7 +183,12 @@ export function drawBlockThree(svg, data) {
   const lineSpacing = ((svg.attr("width") - margins.left)/data.length); 
 
   let sortedData = data.sort((a,b) => {
-    return Number(a.primary) - Number(b.primary);
+    return Number(a[attr]) - Number(b[attr]);
+  }).map((country) => {
+    let before = calcBefore(country, data, attr);
+    let targetYears = calcTargetYears(country, attr, targetLineYear);
+    let educationLevel = (attr === "primary") ? "universal primary education" : "universal secondary education";
+    return {...country, before, educationLevel, targetYears};
   });
 
   let tooltip = select(".tooltip");
@@ -198,18 +218,18 @@ export function drawBlockThree(svg, data) {
     .enter()
     .append("line")
       .attr("y1", (d) => {
-        return scaleY("2015");
+        return scaleY(targetLineYear);
       })
       .attr("x1", (d,i) => {
         return margins.left + i*lineSpacing;
       })
       .attr("y2", (d) => {
-        if(Number(scaleY(d.primary)) > Number(scaleY("2015"))) {
-          return Number(scaleY(d.primary)) - circleSize;
-        } else if(Number(scaleY(d.primary)) === Number(scaleY("2015"))) {
-          return scaleY("2015");
+        if(Number(scaleY(d[attr])) > Number(scaleY(targetLineYear))) {
+          return Number(scaleY(d[attr])) - circleSize;
+        } else if(Number(scaleY(d[attr])) === Number(scaleY(targetLineYear))) {
+          return scaleY(targetLineYear);
         } else {
-          return Number(scaleY(d.primary)) + circleSize;
+          return Number(scaleY(d[attr])) + circleSize;
         }
       })
       .attr("x2", (d,i) => {
@@ -219,36 +239,22 @@ export function drawBlockThree(svg, data) {
         return "#f6f6f6";
       })
       .style("stroke-width", "6px")
-      .on("mouseover", function(d, i) {
-        let rect = svg.node().getBoundingClientRect();
-        let yDist = Number(scaleY(d.primary)) + Number(rect.top) + Number(window.scrollY) - 70;
-        let xDist = Number(rect.left) + Number(margins.left + i*lineSpacing);
-
-        tooltip.style("position", "absolute")
-          .style("display", "block")
-          .style("left", (xDist - 116) + "px")
-          .style("top", yDist + "px")
-          .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">Achieved in <b></b>, before <b>${d.before}%</b> of the world</span>`);
-      });
-
-    svg.on("mouseleave", function(d, i) {
-      tooltip.style("display", "none");
-    });
+      .attr("data-code", d => d.code3);
 
     var targetLineGroup = svg.append("g");
     
     targetLineGroup.append("line")
-      .attr("y1", scaleY("2015"))
+      .attr("y1", scaleY(targetLineYear))
       .attr("x1", 0)
-      .attr("y2", scaleY("2015"))
+      .attr("y2", scaleY(targetLineYear))
       .attr("x2", svg.attr("width"))
       .style("stroke", "#bdbdbd")
       .style("stroke-width", "1px")
       .style("pointer-events", "none");
     
     targetLineGroup.append("text")
-      .text("Target year for universal primary education")
-      .attr("y", scaleY("2015"))
+      .text(targetLineLabel)
+      .attr("y", scaleY(targetLineYear))
       .attr("x", svg.attr("width"))
       .attr("dy", -5)
       .style("text-anchor", "end")
@@ -260,6 +266,7 @@ export function drawBlockThree(svg, data) {
       .data(sortedData)
       .enter()
       .append("line")
+        .attr("data-code", d => d.code3)
         .attr("x1", (d,i) => {
           return margins.left + i*lineSpacing - 3;
         })
@@ -267,10 +274,10 @@ export function drawBlockThree(svg, data) {
           return margins.left + i*lineSpacing + 3;
         })
         .attr("y1", (d,i) => {
-          return scaleY(d.primary);
+          return scaleY(d[attr]);
         })
         .attr("y2", (d,i) => {
-          return scaleY(d.primary);
+          return scaleY(d[attr]);
         })
         .style("stroke", (d) => {
           return incomeColour(d.income);
@@ -283,30 +290,30 @@ export function drawBlockThree(svg, data) {
       .enter()
       .append("text")
         .attr("y", (d) => {
-          return scaleY(d.primary);
+          return scaleY(d[attr]);
         })
         .attr("x", (d,i) => {
           return margins.left + i*lineSpacing;
         })
         .attr("dx", (d) => {
-          if(Number(scaleY(d.primary)) <= Number(scaleY("2015"))) {
-            return Number(scaleY(d.primary)) - Number(scaleY("2015")) - 5;
+          if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
+            return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) - 5;
           } else {
-            return Number(scaleY(d.primary)) - Number(scaleY("2015")) + 5;
+            return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) + 5;
           }
         })
         .text(d => d.country)
         .style("fill", "#bdbdbd")
         .style("dominant-baseline", "central")
         .style("text-anchor", (d) => {
-          if(Number(scaleY(d.primary)) <= Number(scaleY("2015"))) {
+          if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
             return "end";
           } else {
             return "start";
           }
         })
         .attr("transform", (d,i) => {
-          return "rotate(-90," + (margins.left + i*lineSpacing) + "," + scaleY(d.primary) + ")";
+          return "rotate(-90," + (margins.left + i*lineSpacing) + "," + scaleY(d[attr]) + ")";
         })
         .attr("data-code", d => d.code3)
         .classed("country-label", true)
@@ -315,7 +322,7 @@ export function drawBlockThree(svg, data) {
     svg.append("text")
       .text("Years behind target")
       .attr("x", svg.attr("width") - 40)
-      .attr("y", scaleY("2050"))
+      .attr("y", scaleY(targetLineYear + 30))
       .style("text-anchor", "end")
       .style("fill", "#767676")
       .style("stroke", "#fff")
@@ -325,234 +332,245 @@ export function drawBlockThree(svg, data) {
     svg.append("text")
       .text("Years behind target")
       .attr("x", svg.attr("width") - 40)
-      .attr("y", scaleY("2050"))
+      .attr("y", scaleY(targetLineYear + 30))
       .style("text-anchor", "end")
       .style("fill", "#767676")
       .classed("target-label", true);
 
-    svg.append("text")
-      .text("Years infront of target")
-      .attr("x", 80)
-      .attr("y", scaleY("1995"))
-      .style("fill", "#767676")
-      .style("stroke", "#fff")
-      .style("stroke-width", "3px")
-      .classed("target-label", true);
+    if(attr === "primary") {
+      svg.append("text")
+        .text("Years ahead of target")
+        .attr("x", 80)
+        .attr("y", scaleY("1995"))
+        .style("fill", "#767676")
+        .style("stroke", "#fff")
+        .style("stroke-width", "3px")
+        .classed("target-label", true);
 
-    svg.append("text")
-      .text("Years infront of target")
-      .attr("x", 80)
-      .attr("y", scaleY("1995"))
-      .style("fill", "#767676")
-      .classed("target-label", true);
+      svg.append("text")
+        .text("Years ahead of target")
+        .attr("x", 80)
+        .attr("y", scaleY("1995"))
+        .style("fill", "#767676")
+        .classed("target-label", true);
+    }
 
     svg.append("g")
-    .selectAll("line")
-    .data(sortedData)
-    .enter()
-    .append("line")
-      .attr("y1", (d) => {
-        return svg.attr("height");
-      })
-      .attr("x1", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .attr("y2", 0)
-      .attr("x2", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .style("stroke", "#fff")
-      .style("stroke-opacity", 0)
-      .style("stroke-width", "8px")
-      .on("mouseenter", function(d, i) {
-        let rect = svg.node().getBoundingClientRect();
-        let yDist = Number(scaleY(d.primary)) + Number(rect.top) + Number(window.scrollY) - 70;
-        let xDist = Number(rect.left) + Number(margins.left + i*lineSpacing);
+      .selectAll("line")
+      .data(sortedData)
+      .enter()
+      .append("line")
+        .attr("y1", (d) => {
+          return svg.attr("height");
+        })
+        .attr("x1", (d,i) => {
+          return margins.left + i*lineSpacing;
+        })
+        .attr("y2", 0)
+        .attr("x2", (d,i) => {
+          return margins.left + i*lineSpacing;
+        })
+        .style("stroke", "#fff")
+        .style("stroke-opacity", 0)
+        .style("stroke-width", "8px")
+        .on("mouseover", function(d, i) {
+          let year = d[attr];
+          let achieveMessage = (Number(year) > targetLineYear) ? "Forecast to achieve" : "Achieved";
 
-        tooltip.style("position", "absolute")
-          .style("display", "block")
-          .style("left", (xDist - 116) + "px")
-          .style("top", yDist + "px")
-          .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">Achieved in <b></b>, before <b>${d.before}%</b> of the world</span>`);
-      });
+          let yearsMessage = (d.targetYears > 0) ? "behind target" : "ahead of target";
 
+          let rect = svg.node().getBoundingClientRect();
+          let yDist = Number(scaleY(d[attr])) + Number(rect.top) + Number(window.scrollY) - 70;
+          let xDist = Number(rect.left) + Number(margins.left + i*lineSpacing);
+
+          tooltip.style("position", "absolute")
+            .style("display", "block")
+            .style("left", (xDist - 126) + "px")
+            .style("top", yDist + "px")
+            .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">${achieveMessage} ${d.educationLevel} in <b>${year}</b>, <b>${Math.abs(d.targetYears)} years</b> ${yearsMessage}</span>`);
+        });
+
+    // svg.append("g")
+    //   .selectAll("circle")
+    //   .data(sortedData)
+    //   .enter()
+    //   .append("circle")
+    //     .attr("cy", (d) => {
+    //       return Number(scaleY(d[attr]));
+    //     })
+    //     .attr("cx", (d,i) => {
+    //       return margins.left + i*lineSpacing;
+    //     })
+    //     .attr("r", 3)
+    //     .style("stroke", "#fff")
+    //     .style("stroke-opacity", 0)
+    //     .style("stroke-width", "8px")
+        
     svg.on("mouseleave", function(d, i) {
       tooltip.style("display", "none");
     });
 
   }
 
-  export function drawBlockThreeSvg2(svg, data) {
-  const margins = {
-    left: 60,
-    right: 0
-  }
+export function drawInfantMortality(svg, data) {
+  const circleR = 10;
+  const lineSpacing = 48;
+  const marginTop = 30;
 
-  const circleSize = 1;
+  svg.style("margin-top", "24px").style("margin-bottom", "48px");
 
-  const lineSpacing = ((svg.attr("width") - margins.left)/data.length); 
+  let scaleX = scaleLinear()
+    .domain([0, 100])
+    .range([5, svg.attr("width") - 5]);
 
-  let tooltip = select(".tooltip");
-
-  let sortedData = data.sort((a,b) => {
-    return Number(a.upperSecondary) - Number(b.upperSecondary);
-  });
-
-  let scaleY = scaleLinear()
-    .domain([1970, 2100])
-    .range([0, svg.attr("height")]);
-
-  let axis = axisLeft(scaleY).tickFormat(format("d"));
+  let axis = axisTop(scaleX);
 
   svg.append("g")
-    .call(axis);
+    .call(axis)
+    .style("transform", "translateY(" + marginTop + "px)");
+  
+  svg.append("g").classed("tick", true)
+    .append("text")
+    .text("Deaths of children under 5 for every 1,000 live births")
+    .attr("x", 1)
+    .attr("y", 0)
+    .style("fill", "#767676")
+    .style("text-anchor", "start");
 
-  svg.selectAll(".tick line").attr("x2", svg.attr("width"))
-    .attr("x1", 0)
+  svg.selectAll(".tick line").attr("y2", svg.attr("height")).attr("y1", 0)
     .style("stroke", "#e9e9e9")
-    .style("stroke-dasharray", ("1, 1"));
-
-  svg.selectAll(".tick text").attr("x", 0)
-    .attr("dy", -4)
-    .style("text-anchor", "initial");
+    .style("stroke-dasharray", ("1,1"));
 
   svg.selectAll(".domain").remove();
 
-  svg.append("g")
-    .selectAll("line")
-    .data(sortedData)
-    .enter()
-    .append("line")
-      .attr("y1", (d) => {
-        return scaleY("2030");
-      })
-      .attr("x1", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .attr("y2", (d) => {
-        if(Number(scaleY(d.upperSecondary)) > Number(scaleY("2030"))) {
-          return Number(scaleY(d.upperSecondary)) - circleSize;
-        } else if(Number(scaleY(d.upperSecondary)) === Number(scaleY("2030"))) {
-          return scaleY("2030");
-        } else {
-          return Number(scaleY(d.upperSecondary)) + circleSize;
-        }
-      })
-      .attr("x2", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .style("stroke", (d) => {
-        return "#f6f6f6";
-      })
-      .style("stroke-width", "6px")
-      .on("mouseover", function(d, i) {
-        let rect = svg.node().getBoundingClientRect();
-        let yDist = Number(scaleY(d.upperSecondary)) + Number(rect.top) + Number(window.scrollY) - 70;
-        let xDist = Number(rect.left) + Number(margins.left + i*lineSpacing);
+  let group = svg.append("g")
+    .selectAll("circle")
+    .data(data)
+    .enter();
 
-        tooltip.style("position", "absolute")
-          .style("display", "block")
-          .style("left", (xDist - 116) + "px")
-          .style("top", yDist + "px")
-          .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">Achieved in <b></b>, before <b>${d.before}%</b> of the world</span>`);
-      });
+  group.append("line")
+    .attr("x1", d => scaleX(d.trend))
+    .attr("x2", d => scaleX(d.sdg))
+    .attr("y1", (d, i) => i * lineSpacing + 20 + marginTop)
+    .attr("y2", (d, i) => i * lineSpacing + 20 + marginTop)
+    .style("stroke", "#f6f6f6")
+    .style("stroke-width", "22px");
 
-  svg.on("mouseleave", function(d, i) {
-    tooltip.style("display", "none");
-  });
-
-  var targetLineGroup = svg.append("g");
-
-  targetLineGroup.append("line")
-    .attr("y1", scaleY("2030"))
-    .attr("x1", 0)
-    .attr("y2", scaleY("2030"))
-    .attr("x2", svg.attr("width"))
-    .style("stroke", "#bdbdbd")
+  group.append("circle")
+    .attr("r", circleR)
+    .attr("cx", d => scaleX(d.trend))
+    .attr("cy", (d, i) => {
+      if(d.sdg === d.trend) {
+        return i * lineSpacing + 20 + marginTop + 2.5; 
+      }
+      return i * lineSpacing + 20 + marginTop; 
+    })
+    .style("fill", "#fff")
+    .style("stroke", "#cc2b12")
     .style("stroke-width", "1px");
 
-  targetLineGroup.append("text")
-    .text("Target year for universal secondary education")
-    .attr("y", scaleY("2030"))
-    .attr("x", svg.attr("width"))
-    .attr("dy", -5)
-    .style("text-anchor", "end")
-    .style("fill", "#bdbdbd")
-    .classed("target-line-label", true);
+  group.append("circle")
+    .attr("r", circleR)
+    .attr("cx", (d) => {
+      return scaleX(d.sdg)
+    })
+    .attr("cy", (d, i) => {
+      if(d.sdg === d.trend) {
+        return i * lineSpacing + 20 + marginTop - 2.5; 
+      }
+      return i * lineSpacing + 20 + marginTop; 
+    })
+    .style("fill", "#ffffff")
+    .style("stroke", "#63717a")
+    .style("stroke-width", "1px");
 
-  svg.append("g")
-    .selectAll("line")
-    .data(sortedData)
-    .enter()
-    .append("line")
-      .attr("x1", (d,i) => {
-        return margins.left + i*lineSpacing - 3;
-      })
-      .attr("x2", (d,i) => {
-        return margins.left + i*lineSpacing + 3;
-      })
-      .attr("y1", (d,i) => {
-        return scaleY(d.upperSecondary);
-      })
-      .attr("y2", (d,i) => {
-        return scaleY(d.upperSecondary);
-      })
-      .style("stroke", (d) => {
-        return incomeColour(d.income);
-      })
-      .style("stroke-width", "2px");
+  group.append("text")
+    .text(d => d.country)
+    .attr("x", d => scaleX(d.trend))
+    .attr("y", (d, i) => i * lineSpacing + 20 + marginTop)
+    .attr("dx", 15)
+    .attr("dy", 5)
+    .style("fill", "#767676");
+}
 
-  svg.append("g")
-    .selectAll("text.label")
-    .data(sortedData)
-    .enter()
-    .append("text")
-      .attr("y", (d) => {
-        return scaleY(d.upperSecondary);
-      })
-      .attr("x", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .attr("dx", (d) => {
-        if(Number(scaleY(d.upperSecondary)) <= Number(scaleY("2030"))) {
-          return Number(scaleY(d.upperSecondary)) - Number(scaleY("2030")) - 5;
-        } else {
-          return Number(scaleY(d.upperSecondary)) - Number(scaleY("2030")) + 5;
-        }
-      })
-      .text(d => d.country)
-      .style("fill", "#bdbdbd")
-      .classed("country-label", true)
-      .style("display", "none")
-      .attr("data-code", d => d.code3)
-      .style("dominant-baseline", "central")
-      .style("text-anchor", (d) => {
-        if(Number(scaleY(d.upperSecondary)) <= Number(scaleY("2030"))) {
-          return "end";
-        } else {
-          return "start";
-        }
-      })
-      .attr("transform", (d,i) => {
-        return "rotate(-90," + (margins.left + i*lineSpacing) + "," + scaleY(d.upperSecondary) + ")";
-      });
+export function drawPoverty(svg, data) {
+  let margins = {
+    left: 40,
+    bottom: 20,
+    top: 20,
+    right: 0
+  };
 
+  var xScale = scaleLinear()
+    .domain([2020, 2060])
+    .range([margins.left, svg.attr("width") - margins.right]); 
 
-    svg.append("text")
-      .text("Years behind target")
-      .attr("x", svg.attr("width") - 40)
-      .attr("y", scaleY("2065"))
-      .style("text-anchor", "end")
-      .style("fill", "#767676")
-      .style("stroke", "#fff")
-      .style("stroke-width", "3px")
-      .classed("target-label", true);
+  var yScale = scaleLinear()
+    .domain([0,45])
+    .range([svg.attr("height") - margins.bottom, margins.top]);
 
-    svg.append("text")
-      .text("Years behind target")
-      .attr("x", svg.attr("width") - 40)
-      .attr("y", scaleY("2065"))
-      .style("text-anchor", "end")
-      .style("fill", "#767676")
-      .classed("target-label", true);
+  let line1Data = [];
+  let line2Data = [];
+
+  for(var i = 1; i < data[0].length; i++) {
+    line1Data.push({
+      "year": data[0][i],
+      "point": data[1][i]
+    });
+
+    line2Data.push({
+      "year": data[0][i],
+      "point": data[2][i]
+    });
   }
+
+  let axis = axisBottom(xScale).tickFormat(format("d"));
+  let axis2 = axisLeft(yScale);
+
+  svg.append("g").call(axis);
+
+  svg.selectAll(".tick line").attr("y2", svg.attr("height") - margins.bottom).attr("y1", margins.top)
+    .style("stroke", "#e9e9e9")
+    .style("stroke-dasharray", ("1,1"));
+
+  svg.selectAll(".tick text").attr("y", svg.attr("height") - margins.bottom + 10);
+
+  svg.select(".domain").remove();
+
+  svg.append("g").classed("left-axis", true).call(axis2).select(".domain").remove();
+
+  svg.selectAll(".left-axis .tick line").attr("x2", svg.attr("width")).attr("x1", 0)
+    .style("stroke", "#e9e9e9")
+    .style("stroke-dasharray", ("1,1"));
+
+  svg.selectAll(".left-axis .tick text")
+    .style("text-anchor", "start")
+    .attr("x", 0)
+    .attr("dy", -4);
+    
+  var genLine = line()
+    .x(function(d) { return xScale(d.year); })
+    .y(function(d) { return yScale(d.point); });
+
+  svg.append("path")
+    .attr("class", "line")
+    .attr("d", genLine(line1Data))
+    .style("stroke", "#cc2b12")
+    .style("stroke-width", "1.25px")
+    .style("fill", "none");
+
+  svg.append("path")
+    .attr("class", "line")
+    .attr("d", genLine(line2Data))
+    .style("stroke", "#484f53")
+    .style("stroke-width", "1.25px")
+    .style("fill", "none");
+
+  svg.append("g").classed("tick", true)
+    .append("text")
+    .text("% of population living below national poverty line")
+    .attr("x", 20)
+    .attr("y", margins.top - 4)
+    .style("fill", "#767676")
+    .style("text-anchor", "start");
+}

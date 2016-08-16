@@ -12,26 +12,29 @@ html, body,
 	h1 {
 		@include fs-header(3);
 		margin-bottom: 4px;
+		font-weight: 600;
 	}
 
 	h2 {
 		@include fs-header(1);
 		margin-bottom: 0px;
+		margin-top: 24px;
+		font-weight: 600;
 	}
 
-	.subheading {
+	p {
 		@include fs-bodyCopy(2);
 		margin: 0;
 		color: #767676;
 	}
 
 	.block {
-		margin-bottom: 84px;
+		// margin-bottom: 84px;
 		overflow: hidden;
 	}
 
 	.svg {
-		float: left;
+		margin: auto;
 		margin-top: 24px;
 
 		.small-circle {
@@ -106,7 +109,7 @@ html, body,
 	background-color: rgba(255, 255, 255, 1);
 	padding: 6px 5px;
 	border: 1px solid #eaeaea;
-	width: 220px;
+	width: 240px;
 	pointer-events: none;
 	position: absolute;
 	top: 0;
@@ -160,6 +163,14 @@ html, body,
 	@include fs-textSans(2);
 }
 
+.block-one, .block-two {
+	margin-bottom: 84px;
+
+	.svg {
+		float: left;
+	}
+}
+
 .block-three {
 	.svg {
 		float: initial; 
@@ -183,6 +194,18 @@ html, body,
 	}
 }
 
+.block-four {
+	.tick text {
+		fill: #767676 !important;
+	}
+}
+
+.block-five {
+	.tick text {
+		fill: #767676 !important
+	}
+}
+
 .country-button {
 	display: inline-block;
 	padding: 0px 8px;
@@ -195,6 +218,10 @@ html, body,
 	&.lower-middle-income {
 		background-color: rgba(255, 187, 0, 0.2);
 		border: 1px solid rgb(255, 187, 0);
+	}
+
+	&:hover {
+		cursor: pointer;
 	}
 }
 

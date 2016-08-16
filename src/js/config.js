@@ -30,6 +30,7 @@ System.config({
     "d3-hierarchy": "npm:d3-hierarchy@1.0.2",
     "d3-scale": "npm:d3-scale@1.0.3",
     "d3-selection": "npm:d3-selection@1.0.2",
+    "d3-shape": "npm:d3-shape@1.0.2",
     "d3-transition": "npm:d3-transition@1.0.1",
     "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
     "json": "github:systemjs/plugin-json@0.1.2",
@@ -90,6 +91,9 @@ System.config({
       "d3-interpolate": "npm:d3-interpolate@1.1.1",
       "d3-time": "npm:d3-time@1.0.2",
       "d3-time-format": "npm:d3-time-format@2.0.2"
+    },
+    "npm:d3-shape@1.0.2": {
+      "d3-path": "npm:d3-path@1.0.1"
     },
     "npm:d3-time-format@2.0.2": {
       "d3-time": "npm:d3-time@1.0.2"

@@ -1,25 +1,18 @@
 import { select, selectAll } from 'd3-selection'
-import { csvParse } from 'd3-dsv'
+import { csvParse, csvParseRows } from 'd3-dsv'
 import { scaleLinear, scaleSqrt } from 'd3-scale'
 
-import { drawCircle, drawBlockThree, drawBlockThreeSvg2, incomeColour } from './drawing'
+import { drawCircle, drawBlockThree, drawInfantMortality, drawPoverty, incomeColour, calcBefore } from './drawing'
 
 import data from '../assets/data/countries.csv!text'
+import infantMortalityData from '../assets/data/infant-mortality.csv!text'
+import povertyData from '../assets/data/poverty.csv!text'
 import mainHTML from './text/main.html!text'
-import tableHTML from './text/table.html!text'
 
 export function init(el, context, config, mediator) {
   let parsedData = csvParse(data);
   el.innerHTML = mainHTML;
   render(el, parsedData)
-}
-
-function calcBefore(country, data, attr) {
-  let beforeNumber = data.filter((row) => {
-    return Number(row[attr]) > Number(country[attr]);
-  }).length;
-
-  return ((beforeNumber/(data.length-1)) * 100).toFixed(1);
 }
 
 function render(el, data) {
@@ -49,6 +42,20 @@ function render(el, data) {
     .attr("width", 1260)
     .attr("height", 300)
     .style("overflow", "visible")
+    .style("margin-bottom", "24px");
+
+  let svgFive = select(".block-four .svg-one .svg-wrapper").append("svg")
+    .attr("width", 620)
+    .attr("height", 340)
+    .style("overflow", "visible")
+    .style("margin", "auto")
+    .style("margin-bottom", "24px");
+
+  let svgSix = select(".block-five .svg-one .svg-wrapper").append("svg")
+    .attr("width", 620)
+    .attr("height", 400)
+    .style("overflow", "visible")
+    .style("margin", "auto")
     .style("margin-bottom", "24px");
 
   let radiusScale = scaleSqrt()
@@ -100,6 +107,25 @@ function render(el, data) {
   drawCircle(svgSDGNotMeet, sdgNotMeet, "Forecast not to meet the SDG", select(".block-two .svg-two"));
 
   // block 3
-  drawBlockThree(svgThree, data);
-  drawBlockThreeSvg2(svgFour, data);
+  drawBlockThree(svgThree, data, "primary", "Target year for universal primary education", 2015);
+  drawBlockThree(svgFour, data, "upperSecondary", "Target year for universal secondary education", 2030);
+
+  // block 4
+  drawInfantMortality(svgFive, csvParse(infantMortalityData));
+
+  // block 5
+  drawPoverty(svgSix, csvParseRows(povertyData));
+
+  document.addEventListener("click", function(e) {
+    if(e.target.classList.contains("country-button")) {
+      let el = select(e.target);
+      let code = el.attr("data-code");
+      let blockName = el.attr("data-block");
+      let svgName = el.attr("data-svg");
+
+      let toHighlight = selectAll("." + blockName + " ." + svgName + " line[data-code=" + code + "]");
+
+      toHighlight.style("stroke", "#333");
+    }
+  });
 }
