@@ -25,19 +25,19 @@ function calcBefore(country, data, attr) {
 function render(el, data) {
   let svgMet = select(".block-one .svg-one .svg-wrapper").append("svg")
     .attr("width", 1260/2)
-    .attr("height", 500);
+    .attr("height", 420);
 
   let svgNotMet = select(".block-one .svg-two .svg-wrapper").append("svg")
     .attr("width", 1260/2)
-    .attr("height", 500);
+    .attr("height", 420);
 
   let svgSDGMeet = select(".block-two .svg-one .svg-wrapper").append("svg")
     .attr("width", 1260/2)
-    .attr("height", 600);
+    .attr("height", 500);
 
   let svgSDGNotMeet = select(".block-two .svg-two .svg-wrapper").append("svg")
     .attr("width", 1260/2)
-    .attr("height", 600);
+    .attr("height", 500);
 
   let svgThree = select(".block-three .svg-one .svg-wrapper").append("svg")
     .attr("width", 1260)
@@ -53,7 +53,7 @@ function render(el, data) {
 
   let radiusScale = scaleSqrt()
     .domain([100000,1371220000])
-    .range([5, 95]);
+    .range([5, 80]);
 
   let mdgMet = data.filter((country) => {
       return Number(country.primary) <= 2015;

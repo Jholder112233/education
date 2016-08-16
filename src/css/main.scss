@@ -16,6 +16,7 @@ html, body,
 
 	h2 {
 		@include fs-header(1);
+		margin-bottom: 0px;
 	}
 
 	.subheading {
@@ -165,7 +166,7 @@ html, body,
 	}
 
 	.tick text {
-		fill: #767676;
+		fill: #bdbdbd;
 		@include fs-textSans(1);
 	}
 
@@ -184,7 +185,7 @@ html, body,
 
 .country-button {
 	display: inline-block;
-	padding: 0px 5px;
+	padding: 0px 8px;
 	border-radius: 40px;
 
 	&.upper-middle-income {
