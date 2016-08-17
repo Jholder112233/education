@@ -9,58 +9,95 @@ import infantMortalityData from '../assets/data/infant-mortality.csv!text'
 import povertyData from '../assets/data/poverty.csv!text'
 import mainHTML from './text/main.html!text'
 
+import domReady from 'domready'
+
 export function init(el, context, config, mediator) {
   let parsedData = csvParse(data);
-  el.innerHTML = mainHTML;
-  render(el, parsedData)
+  // el.innerHTML = mainHTML;
+
+  domReady(function () {
+    render(el, parsedData)
+  });
 }
 
 function render(el, data) {
+  let containerWidth = document.querySelector(".interactive-container").clientWidth;
+  let padding = (containerWidth > 740) ? 40 : 20;
+  let fullWidth = containerWidth - padding; console.log(fullWidth);
+  let halfWidth = (fullWidth > 740) ? fullWidth/2 : fullWidth;
+  let middleWidth = document.querySelector(".middle").clientWidth;
+
   let svgMet = select(".block-one .svg-one .svg-wrapper").append("svg")
-    .attr("width", 1260/2)
+    .attr("width", halfWidth)
     .attr("height", 420);
 
   let svgNotMet = select(".block-one .svg-two .svg-wrapper").append("svg")
-    .attr("width", 1260/2)
+    .attr("width", halfWidth)
     .attr("height", 420);
 
   let svgSDGMeet = select(".block-two .svg-one .svg-wrapper").append("svg")
-    .attr("width", 1260/2)
+    .attr("width", halfWidth)
     .attr("height", 500);
 
   let svgSDGNotMeet = select(".block-two .svg-two .svg-wrapper").append("svg")
-    .attr("width", 1260/2)
+    .attr("width", halfWidth)
     .attr("height", 500);
 
-  let svgThree = select(".block-three .svg-one .svg-wrapper").append("svg")
-    .attr("width", 1260)
+  let svgThreeScale = select(".block-three .svg-one").append("svg")
+    .attr("width", 40)
     .attr("height", 300)
     .style("overflow", "visible")
-    .style("margin-bottom", "24px");
+    .style("margin-top", "24px")
+    .style("position", "absolute")
+    .style("z-index", "3")
+    .style("left", 0)
+    .style("top", 0)
+    .style("background-color", "#fff");
+
+  let svgThree = select(".block-three .svg-one .svg-wrapper").append("svg")
+    .attr("width", fullWidth)
+    .attr("height", 300)
+    .style("overflow", "visible")
+    // .style("margin-bottom", "24px")
+    .style("margin-top", "24px");
+
+  let svgFourScale = select(".block-three .svg-two").append("svg")
+    .attr("width", 40)
+    .attr("height", 300)
+    .style("overflow", "visible")
+    .style("margin-top", "24px")
+    .style("position", "absolute")
+    .style("z-index", "3")
+    .style("left", 0)
+    .style("top", 0)
+    .style("background-color", "#fff");
 
   let svgFour = select(".block-three .svg-two .svg-wrapper").append("svg")
-    .attr("width", 1260)
+    .attr("width", fullWidth)
     .attr("height", 300)
     .style("overflow", "visible")
-    .style("margin-bottom", "24px");
+    // .style("margin-bottom", "24px")
+    .style("margin-top", "24px");
 
   let svgFive = select(".block-four .svg-one .svg-wrapper").append("svg")
-    .attr("width", 620)
+    .attr("width", middleWidth)
     .attr("height", 340)
     .style("overflow", "visible")
     .style("margin", "auto")
     .style("margin-bottom", "24px");
 
   let svgSix = select(".block-five .svg-one .svg-wrapper").append("svg")
-    .attr("width", 620)
+    .attr("width", middleWidth)
     .attr("height", 400)
     .style("overflow", "visible")
     .style("margin", "auto")
     .style("margin-bottom", "24px");
 
+  let topRad = (fullWidth < 227.65*2) ? 65*(fullWidth/(227.65*2)) : 80;
+
   let radiusScale = scaleSqrt()
     .domain([100000,1371220000])
-    .range([5, 80]);
+    .range([5, topRad]);
 
   let mdgMet = data.filter((country) => {
       return Number(country.primary) <= 2015;
@@ -99,16 +136,16 @@ function render(el, data) {
     }); 
 
   // block 1
-  drawCircle(svgMet, mdgMet, "Met the MDG", select(".block-one .svg-one"));
-  drawCircle(svgNotMet, mdgNotMet, "Did not meet the MDG", select(".block-one .svg-two"));
+  drawCircle(svgMet, mdgMet, "Met the MDG", select(".block-one .svg-one"), containerWidth);
+  drawCircle(svgNotMet, mdgNotMet, "Did not meet the MDG", select(".block-one .svg-two"), containerWidth);
 
   // block 2
-  drawCircle(svgSDGMeet, sdgMeet, "Forecast to meet the SDG", select(".block-two .svg-one"));
-  drawCircle(svgSDGNotMeet, sdgNotMeet, "Forecast not to meet the SDG", select(".block-two .svg-two"));
+  drawCircle(svgSDGMeet, sdgMeet, "Forecast to meet the SDG", select(".block-two .svg-one"), containerWidth);
+  drawCircle(svgSDGNotMeet, sdgNotMeet, "Forecast not to meet the SDG", select(".block-two .svg-two"), containerWidth);
 
   // block 3
-  drawBlockThree(svgThree, data, "primary", "Target year for universal primary education", 2015);
-  drawBlockThree(svgFour, data, "upperSecondary", "Target year for universal secondary education", 2030);
+  drawBlockThree(svgThree, data, "primary", "Target year for universal primary education", 2015, svgThreeScale);
+  drawBlockThree(svgFour, data, "upperSecondary", "Target year for universal secondary education", 2030, svgFourScale);
 
   // block 4
   drawInfantMortality(svgFive, csvParse(infantMortalityData));

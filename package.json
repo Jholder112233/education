@@ -37,6 +37,7 @@
       "d3-selection": "npm:d3-selection@^1.0.2",
       "d3-shape": "npm:d3-shape@^1.0.2",
       "d3-transition": "npm:d3-transition@^1.0.1",
+      "domready": "npm:domready@^1.0.8",
       "guardian/iframe-messenger": "github:guardian/iframe-messenger@master",
       "json": "github:systemjs/plugin-json@^0.1.0",
       "reqwest": "github:ded/reqwest@^1.1.5",

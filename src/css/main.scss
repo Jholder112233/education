@@ -8,6 +8,8 @@ html, body,
 .element-interactive {
 	@include fs-textSans(3);
 	min-height: 1000px;
+	overflow-x: hidden;
+	opacity: 1 !important;
 
 	h1 {
 		@include fs-header(3);
@@ -65,7 +67,8 @@ html, body,
 		}
 
 		table {
-			width: 400px;
+			width: 100%;
+			max-width: 400px;
 			text-align: left;
 			margin: auto;
 			margin-top: 36px;
@@ -115,6 +118,11 @@ html, body,
 	top: 0;
 	left: 0;
 	display: none;
+	z-index: 100;
+
+	@include mq($until: desktop) {
+		display: none !important;
+	}
 
 	&:after, &:before {
 		top: 100%;
@@ -168,12 +176,23 @@ html, body,
 
 	.svg {
 		float: left;
+
+		@include mq(desktop) {
+			width: 50%;
+		}
 	}
 }
 
 .block-three {
 	.svg {
-		float: initial; 
+		position: relative;
+	}
+
+	@include mq($until: tablet) {
+		.svg-wrapper {
+			overflow-x: scroll;
+			-webkit-overflow-scrolling: touch;
+		}
 	}
 
 	.tick text {
