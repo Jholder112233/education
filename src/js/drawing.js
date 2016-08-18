@@ -7,6 +7,9 @@ import { transition } from 'd3-transition'
 import { easeCubic, easeElasticOut, easeExpIn, easeBackOut, easeBounceOut, easePolyIn } from 'd3-ease' 
 import { packSiblings, packEnclose } from 'd3-hierarchy'
 import { line, area } from 'd3-shape'
+import throttle from './lib/throttle'
+
+var header = document.getElementById("header");
 
 export function incomeColour(incomeGroup) {
   var colour;
@@ -66,6 +69,7 @@ export function calcTargetYears(country, attr, target) {
 // }
 
 export function drawCircle(svg, data, title, el, containerWidth) {
+  let headerHeight = (header) ? header.clientHeight : 0;
   const padding = 2;
 
   let circles = packSiblings(data);
@@ -91,7 +95,7 @@ export function drawCircle(svg, data, title, el, containerWidth) {
     svg.attr("height", ((bigCircle.r*2) + 48));
   }
 
-  svg.append("g").selectAll("circle")
+  let circleG = svg.append("g").selectAll("circle")
     .data(circles)
     .enter().append("circle")
       .attr("class", (d,i) => { return "country " + d.code3; })
@@ -110,7 +114,9 @@ export function drawCircle(svg, data, title, el, containerWidth) {
       .on("mousemove", function(d) {
         let year = (d.educationLevel === "universal secondary education") ? d.upperSecondary : d.primary;
         let achieveMessage = (Number(year) > 2015) ? "Forecast to achieve" : "Achieved";
-        let verticalOffset = (Number(year) > 2015) ? event.pageY - 84 : event.pageY - 72;
+
+        let headerOffset = window.scrollY + Number(svg.node().parentNode.parentNode.offsetParent.getBoundingClientRect().top);
+        let verticalOffset = (Number(year) > 2015) ? event.pageY - 84 - headerOffset: event.pageY - 72 - headerOffset;
 
         tooltip.style("position", "absolute")
           .style("display", "block")
@@ -121,7 +127,31 @@ export function drawCircle(svg, data, title, el, containerWidth) {
       .on("mouseout", function(d) {
         tooltip.style("display", "none");
       })
-      .transition()
+    
+
+  let textG = svg.append("g").selectAll("text")
+    .data(circles)
+    .enter().append("text")
+      .classed("circle-label", true)
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("dy", "4")
+      .style("text-anchor", "middle")
+      .style("fill", (d) => {
+        return incomeColour(d.income);
+      })
+      .style("opacity", 0)
+      .text((d) => {
+        return d.code3;
+      });
+
+  var animated = false;
+  var screenHeight = window.innerHeight;
+
+  function doAnimation() {
+    if(!animated && (svg.node().getBoundingClientRect().bottom + 100 < screenHeight || svg.node().getBoundingClientRect().top < 0)) {
+      animated = true;
+      circleG.transition()
         .ease(easeElasticOut)
         .delay(function(d, i) { return 500 + (i * 25); })
         .duration(1200)
@@ -138,22 +168,7 @@ export function drawCircle(svg, data, title, el, containerWidth) {
           return d.r - padding
         });
 
-  svg.append("g").selectAll("text")
-    .data(circles)
-    .enter().append("text")
-      .classed("circle-label", true)
-      .attr("x", function(d) { return d.x; })
-      .attr("y", function(d) { return d.y; })
-      .attr("dy", "4")
-      .style("text-anchor", "middle")
-      .style("fill", (d) => {
-        return incomeColour(d.income);
-      })
-      .style("opacity", 0)
-      .text((d) => {
-        return d.code3;
-      })
-      .transition()
+      textG.transition()
         .delay(function(d, i) { return (i * 25) + 500 + 500; })
         .duration(300)
         .style("opacity", (d) => {
@@ -163,6 +178,12 @@ export function drawCircle(svg, data, title, el, containerWidth) {
             return 0;
           }
         });
+    }
+  }
+
+  setTimeout(doAnimation, 10);
+
+  window.addEventListener("scroll", throttle(doAnimation, 100));
 
   svg.append("text")
     .text(title)
@@ -175,9 +196,8 @@ export function drawCircle(svg, data, title, el, containerWidth) {
     .style("transform", "translate(" + svg.attr("width")/2 + "px," + svg.attr("height")/2 + "px)");
 }
 
-
 export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear, scaleSvg) {
-  var mobile = svg.attr("width") <= 740;
+  let mobile = svg.attr("width") <= 740;
 
   const margins = {
     left: 60,
@@ -278,14 +298,16 @@ export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear,
       .style("fill", "#bdbdbd")
       .classed("target-line-label", true);
 
-    scaleSvg.append("line")
-      .attr("y1", scaleSvg.attr("height"))
-      .attr("x1", scaleSvg.attr("width")-1)
-      .attr("y2", 0)
-      .attr("x2", scaleSvg.attr("width")-1)
-      .style("stroke", "#e9e9e9")
-      .style("stroke-width", "1px")
-      .style("pointer-events", "none");
+    if(mobile) {
+      scaleSvg.append("line")
+        .attr("y1", scaleSvg.attr("height"))
+        .attr("x1", scaleSvg.attr("width")-1)
+        .attr("y2", 0)
+        .attr("x2", scaleSvg.attr("width")-1)
+        .style("stroke", "#e9e9e9")
+        .style("stroke-width", "1px")
+        .style("pointer-events", "none");
+    }
 
     scaleSvg.append("line")
       .attr("y1", scaleY(targetLineYear))
@@ -318,40 +340,40 @@ export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear,
       .style("fill-opacity", 0.2);
 
     if(mobile) {
-    svg.append("g")
-      .selectAll("text.label")
-      .data(sortedData)
-      .enter()
-      .append("text")
-        .attr("y", (d) => {
-          return scaleY(d[attr]);
-        })
-        .attr("x", (d,i) => {
-          return margins.left + i*lineSpacing;
-        })
-        .attr("dx", (d) => {
-          if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
-            return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) - 5;
-          } else {
-            return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) + 5;
-          }
-        })
-        .text(d => d.country)
-        .style("fill", "#bdbdbd")
-        .style("dominant-baseline", "central")
-        .style("text-anchor", (d) => {
-          if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
-            return "end";
-          } else {
-            return "start";
-          }
-        })
-        .attr("transform", (d,i) => {
-          return "rotate(-90," + (margins.left + i*lineSpacing) + "," + scaleY(d[attr]) + ")";
-        })
-        .attr("data-code", d => d.code3)
-        .classed("country-label", true)
-        // .style("display", "none");
+      svg.append("g")
+        .selectAll("text.label")
+        .data(sortedData)
+        .enter()
+        .append("text")
+          .attr("y", (d) => {
+            return scaleY(d[attr]);
+          })
+          .attr("x", (d,i) => {
+            return margins.left + i*lineSpacing;
+          })
+          .attr("dx", (d) => {
+            if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
+              return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) - 5;
+            } else {
+              return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) + 5;
+            }
+          })
+          .text(d => d.country)
+          .style("fill", "#bdbdbd")
+          .style("dominant-baseline", "central")
+          .style("text-anchor", (d) => {
+            if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
+              return "end";
+            } else {
+              return "start";
+            }
+          })
+          .attr("transform", (d,i) => {
+            return "rotate(-90," + (margins.left + i*lineSpacing) + "," + scaleY(d[attr]) + ")";
+          })
+          .attr("data-code", d => d.code3)
+          .classed("country-label", true)
+          // .style("display", "none");
     }
 
     svg.append("text")
@@ -413,9 +435,8 @@ export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear,
           let achieveMessage = (Number(year) > targetLineYear) ? "Forecast to achieve" : "Achieved";
 
           let yearsMessage = (d.targetYears > 0) ? "behind target" : "ahead of target";
-
           let rect = svg.node().getBoundingClientRect();
-          let yDist = Number(scaleY(d[attr])) + Number(rect.top) + Number(window.scrollY) - 70;
+          let yDist = Number(scaleY(d[attr])) + Number(rect.top) - Number(svg.node().parentNode.parentNode.offsetParent.getBoundingClientRect().top) - 70;
           let xDist = Number(rect.left) + Number(margins.left + i*lineSpacing);
 
           tooltip.style("position", "absolute")

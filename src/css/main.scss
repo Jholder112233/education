@@ -4,7 +4,6 @@
 @import "general";
 @import "share";
 
-html, body,
 .element-interactive {
 	@include fs-textSans(3);
 	min-height: 1000px;
@@ -12,7 +11,8 @@ html, body,
 	opacity: 1 !important;
 
 	h1 {
-		@include fs-header(3);
+		@include fs-header(2);
+		margin-top: 24px;
 		margin-bottom: 4px;
 		font-weight: 600;
 	}
@@ -26,11 +26,10 @@ html, body,
 
 	p {
 		@include fs-bodyCopy(2);
-		margin: 0;
-		color: #767676;
+		color: #333333;
 	}
 
-	.block {
+	.int-block {
 		// margin-bottom: 84px;
 		overflow: hidden;
 	}
@@ -171,7 +170,7 @@ html, body,
 	@include fs-textSans(2);
 }
 
-.block-one, .block-two {
+.int-block-one, .int-block-two {
 	margin-bottom: 84px;
 
 	.svg {
@@ -183,7 +182,7 @@ html, body,
 	}
 }
 
-.block-three {
+.int-block-three {
 	.svg {
 		position: relative;
 	}
@@ -213,13 +212,13 @@ html, body,
 	}
 }
 
-.block-four {
+.int-block-four {
 	.tick text {
 		fill: #767676 !important;
 	}
 }
 
-.block-five {
+.int-block-five {
 	.tick text {
 		fill: #767676 !important
 	}
@@ -246,4 +245,54 @@ html, body,
 
 line.hover {
 	pointer-events: none;
+}
+
+.int-header {
+	h1 {
+		font-weight: 300;
+		font-size: 40px;
+		line-height: 44px;
+		margin-top: 0;
+	}
+
+	h2 {
+		font-weight: 300;
+		color: #767676;
+		font-size: 24px;
+		line-height: 28px;
+		margin-top: 12px;
+		// margin-bottom: 12px;
+		// border-bottom: 1px solid #bdbdbd;
+		padding-bottom: 12px;
+	}
+
+	h3 {
+		@include fs-bodyHeading(1);
+		font-weight: 500;
+		padding-bottom: 12px;
+		color: #767676;
+		border-bottom: 1px solid #bdbdbd;
+		margin-bottom: 12px;
+		// display: none;
+	}
+}
+
+.int-card {
+	background-color: #f6f6f6;
+	border-top: 1px solid #4bc6df;
+	padding: 6px 5px;
+	margin: 24px 0 36px;;
+
+	.int-card__title {
+		@include fs-header(1);
+		margin-bottom: 2px;
+	}
+
+	span {
+		@include fs-textSans(3);
+	}
+}
+
+.l-footer {
+	display: block !important;
 }
