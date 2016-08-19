@@ -14,14 +14,12 @@
 		@include fs-header(2);
 		margin-top: 24px;
 		margin-bottom: 4px;
-		font-weight: 600;
 	}
 
 	h2 {
 		@include fs-header(1);
 		margin-bottom: 0px;
 		margin-top: 24px;
-		font-weight: 600;
 	}
 
 	p {
@@ -250,8 +248,8 @@ line.hover {
 .int-header {
 	h1 {
 		font-weight: 300;
-		font-size: 40px;
-		line-height: 44px;
+		font-size: 44px;
+		line-height: 48px;
 		margin-top: 0;
 	}
 
@@ -273,15 +271,16 @@ line.hover {
 		color: #767676;
 		border-bottom: 1px solid #bdbdbd;
 		margin-bottom: 12px;
+		padding-top: 6px;
 		// display: none;
 	}
 }
 
 .int-card {
-	background-color: #f6f6f6;
+	// background-color: #f6f6f6;
 	border-top: 1px solid #4bc6df;
-	padding: 6px 5px;
-	margin: 24px 0 36px;;
+	padding-top: 4px;
+	margin: 24px 0 36px;
 
 	.int-card__title {
 		@include fs-header(1);
@@ -289,7 +288,7 @@ line.hover {
 	}
 
 	span {
-		@include fs-textSans(3);
+		@include fs-bodyCopy(2);
 	}
 }
 
