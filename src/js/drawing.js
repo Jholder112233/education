@@ -70,7 +70,7 @@ export function calcTargetYears(country, attr, target) {
 
 export function drawCircle(svg, data, title, el, containerWidth) {
   let headerHeight = (header) ? header.clientHeight : 0;
-  const padding = 2;
+  const padding = 1.5;
 
   let circles = packSiblings(data);
   let bigCircle = packEnclose(circles);
@@ -453,9 +453,9 @@ export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear,
   }
 
 export function drawInfantMortality(svg, data) {
-  const circleR = 10;
+  const circleR = 5;
   const lineSpacing = 48;
-  const marginTop = 30;
+  const marginTop = 40;
 
   svg.style("margin-top", "24px").style("margin-bottom", "48px");
 
@@ -471,9 +471,9 @@ export function drawInfantMortality(svg, data) {
   
   svg.append("g").classed("tick", true)
     .append("text")
-    .text("Deaths of children under 5 for every 1,000 live births")
+    .text("Deaths of children under 5 for every 1,000 live births, 2050")
     .attr("x", 1)
-    .attr("y", 0)
+    .attr("y", 4)
     .style("fill", "#767676")
     .style("text-anchor", "start");
 
@@ -494,7 +494,7 @@ export function drawInfantMortality(svg, data) {
     .attr("y1", (d, i) => i * lineSpacing + 20 + marginTop)
     .attr("y2", (d, i) => i * lineSpacing + 20 + marginTop)
     .style("stroke", "#f6f6f6")
-    .style("stroke-width", "22px");
+    .style("stroke-width", "11px");
 
   group.append("circle")
     .attr("r", circleR)
@@ -531,6 +531,40 @@ export function drawInfantMortality(svg, data) {
     .attr("dx", 15)
     .attr("dy", 5)
     .style("fill", "#767676");
+
+  let key = svg.append("g");
+
+  key.append("circle")
+    .attr("r", "5")
+    .attr("cx", 10)
+    .attr("cy", 0)
+    .style("fill", "#fff")
+    .style("stroke", "#cc2b12")
+    .style("stroke-width", "1px");
+
+  key.append("text")
+    .text("Trend")
+    .attr("x", 25)
+    .attr("y", 4)
+    .style("fill", "#767676")
+    .style("text-anchor", "start");
+
+  key.append("circle")
+    .attr("r", "5")
+    .attr("cx", 80)
+    .attr("cy", 0)
+    .style("fill", "#fff")
+    .style("stroke", "#63717a")
+    .style("stroke-width", "1px");
+
+  key.append("text")
+    .text("SDG 4.1 met")
+    .attr("x", 95)
+    .attr("y", 4)
+    .style("fill", "#767676")
+    .style("text-anchor", "start");
+
+  key.style("transform", "translateX(" + (Number(svg.attr("width")) - 174) + "px)");
 }
 
 export function drawPoverty(svg, data) {
@@ -621,11 +655,20 @@ export function drawPoverty(svg, data) {
   svg.select(".left-axis .tick:last-of-type text").html("45% of population living below national poverty line");
 
   svg.append("g")
+    .append("line")
+    .attr("x1", xScale(2050))
+    .attr("x2", xScale(2050))
+    .attr("y1", yScale(9))
+    .attr("y2", yScale(2))
+    .style("stroke", "#333")
+    .style("stroke-width", "1px");
+
+  svg.append("g")
     .selectAll("circle")
     .data(lineData)
     .enter()
     .append("circle")
-    .attr("r", 2.5)
+    .attr("r", 5)
     .attr("cx", d => xScale(d.year))
     .attr("cy", d => yScale(d.point2))
     .style("fill", "#fff")
@@ -638,13 +681,55 @@ export function drawPoverty(svg, data) {
     .data(lineData)
     .enter()
     .append("circle")
-    .attr("r", 2.5)
+    .attr("r", 5)
     .attr("cx", d => xScale(d.year))
     .attr("cy", d => yScale(d.point))
     .style("fill", "#fff")
     // .style("fill-opacity", 0.2)
     .style("stroke", "#cc2b12")
     .style("stroke-width", "1px");
+
+  let tWrapper = svg.append("text")
+    .attr("x", xScale(2050))
+    .attr("y", 286)
+    .style("font-size", "12px");  
+
+  tWrapper.append("tspan").text("A 7% gap in 2050 if");
+  tWrapper.append("tspan").text("education goals aren't met").attr("dy", 13).attr("x", xScale(2050));
+
+  let key = svg.append("g").style("font-size", "12px");
+
+  key.append("circle")
+    .attr("r", "5")
+    .attr("cx", 30)
+    .attr("cy", 0)
+    .style("fill", "#fff")
+    .style("stroke", "#cc2b12")
+    .style("stroke-width", "1px");
+
+  key.append("text")
+    .text("Trend")
+    .attr("x", 40)
+    .attr("y", 4)
+    .style("fill", "#767676")
+    .style("text-anchor", "start");
+
+  key.append("circle")
+    .attr("r", "5")
+    .attr("cx", 95)
+    .attr("cy", 0)
+    .style("fill", "#fff")
+    .style("stroke", "#63717a")
+    .style("stroke-width", "1px");
+
+  key.append("text")
+    .text("SDG 4.1 met")
+    .attr("x", 105)
+    .attr("y", 4)
+    .style("fill", "#767676")
+    .style("text-anchor", "start");
+
+  key.style("transform", "translate(446px,12px)");
 
   // svg.append("g").classed("tick", true)
   //   .append("text")

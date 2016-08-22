@@ -5,7 +5,7 @@ import { scaleLinear, scaleSqrt } from 'd3-scale'
 import { drawCircle, drawBlockThree, drawInfantMortality, drawPoverty, incomeColour, calcBefore } from './drawing'
 
 import data from '../assets/data/countries.csv!text'
-import infantMortalityData from '../assets/data/infant-mortality.csv!text'
+import infantMortalityData from '../assets/data/infant-mortality-two.csv!text'
 import povertyData from '../assets/data/poverty.csv!text'
 import mainHTML from './text/main.html!text'
 
