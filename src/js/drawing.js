@@ -69,6 +69,8 @@ export function calcTargetYears(country, attr, target) {
 // }
 
 export function drawCircle(svg, data, title, el, containerWidth) {
+  console.log(containerWidth);
+  let mobile = containerWidth <= 740;
   let headerHeight = (header) ? header.clientHeight : 0;
   const padding = 1.5;
 
@@ -91,7 +93,7 @@ export function drawCircle(svg, data, title, el, containerWidth) {
     .style("fill", "#f6f6f6")
     .style("fill-opacity", "0.75");
 
-  if(containerWidth <= 740) {
+  if(mobile) {
     svg.attr("height", ((bigCircle.r*2) + 48));
   }
 
@@ -148,13 +150,21 @@ export function drawCircle(svg, data, title, el, containerWidth) {
   var animated = false;
   var screenHeight = window.innerHeight;
 
-  function doAnimation() {
-    if(!animated && (svg.node().getBoundingClientRect().bottom + 100 < screenHeight || svg.node().getBoundingClientRect().top < 0)) {
+  function doAnimation(isMobile) {
+    var duration = 1;
+
+    if(isMobile === true) {
+      duration = 0;
+    }
+
+    console.log(isMobile, animated, title);
+
+    if((isMobile && !animated) || (!animated && (svg.node().getBoundingClientRect().bottom + 100 < screenHeight || svg.node().getBoundingClientRect().top < 0))) {
       animated = true;
       circleG.transition()
         .ease(easeElasticOut)
-        .delay(function(d, i) { return 500 + (i * 25); })
-        .duration(1200)
+        .delay(function(d, i) { return (500 + (i * 25))*duration; })
+        .duration(1200*duration)
         .attr("r", (d, i) => {
           setTimeout(() => {
             let newCountTotal = Number(totalEl.html()) + 1;
@@ -163,14 +173,14 @@ export function drawCircle(svg, data, title, el, containerWidth) {
               incomeElObj[d.income].html(newIncomeTotal);
             }
             totalEl.html(newCountTotal);
-          }, 500+(i * 25));
+          }, (500+(i * 25))*duration);
 
           return d.r - padding
         });
 
       textG.transition()
-        .delay(function(d, i) { return (i * 25) + 500 + 500; })
-        .duration(300)
+        .delay(function(d, i) { return ((i * 25) + 500 + 500)*duration; })
+        .duration(300*duration)
         .style("opacity", (d) => {
           if(d.r > 12) {
             return 1;
@@ -181,9 +191,12 @@ export function drawCircle(svg, data, title, el, containerWidth) {
     }
   }
 
-  setTimeout(doAnimation, 10);
-
-  window.addEventListener("scroll", throttle(doAnimation, 100));
+  if(!mobile) {
+    doAnimation();
+    window.addEventListener("scroll", throttle(doAnimation, 100));
+  } else {
+    doAnimation(true);
+  }
 
   svg.append("text")
     .text(title)
@@ -209,9 +222,10 @@ export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear,
   const lineSpacing = (mobile) ? 15 : ((svg.attr("width") - margins.left)/data.length); 
 
   if(mobile) {
+    let height = Math.max(window.innerHeight, 300) - margins.top - margins.bottom;
     svg.attr("width", (data.length * 15) + margins.left + margins.right);
-    svg.attr("height", 500);
-    scaleSvg.attr("height", 500);
+    svg.attr("height", height);
+    scaleSvg.attr("height", height);
   }
 
   let sortedData = data.sort((a,b) => {
@@ -289,14 +303,34 @@ export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear,
       .style("stroke-width", "1px")
       .style("pointer-events", "none");
     
-    targetLineGroup.append("text")
-      .text(targetLineLabel)
-      .attr("y", scaleY(targetLineYear))
-      .attr("x", svg.attr("width"))
-      .attr("dy", -5)
-      .style("text-anchor", "end")
-      .style("fill", "#bdbdbd")
-      .classed("target-line-label", true);
+    if(mobile && attr === "primary") {
+      targetLineGroup.append("text")
+        .text(targetLineLabel)
+        .attr("y", scaleY(targetLineYear))
+        .attr("x", 55)
+        .attr("dy", -5)
+        // .style("text-anchor", "end")
+        .style("fill", "#bdbdbd")
+        .classed("target-line-label", true);
+    } else if(mobile) {
+      targetLineGroup.append("text")
+        .text(targetLineLabel)
+        .attr("y", scaleY(targetLineYear))
+        .attr("x", svg.attr("width") -10)
+        .attr("dy", 15)
+        .style("text-anchor", "end")
+        .style("fill", "#bdbdbd")
+        .classed("target-line-label", true);
+    } else {
+      targetLineGroup.append("text")
+        .text(targetLineLabel)
+        .attr("y", scaleY(targetLineYear))
+        .attr("x", svg.attr("width"))
+        .attr("dy", -5)
+        .style("text-anchor", "end")
+        .style("fill", "#bdbdbd")
+        .classed("target-line-label", true);
+    }
 
     if(mobile) {
       scaleSvg.append("line")
@@ -660,7 +694,7 @@ export function drawPoverty(svg, data) {
     .attr("x2", xScale(2050))
     .attr("y1", yScale(9))
     .attr("y2", yScale(2))
-    .style("stroke", "#333")
+    .style("stroke", "#767676")
     .style("stroke-width", "1px");
 
   svg.append("g")
