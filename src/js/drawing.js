@@ -1,12 +1,7 @@
 import { select, selectAll, mouse } from 'd3-selection'
-import { csvParse } from 'd3-dsv'
-import { scaleLinear, scaleSqrt } from 'd3-scale'
-import { axisTop, axisLeft, axisBottom } from 'd3-axis'
-import { format } from 'd3-format'
 import { transition } from 'd3-transition'
-import { easeCubic, easeElasticOut, easeExpIn, easeBackOut, easeBounceOut, easePolyIn } from 'd3-ease' 
+import { easeElasticOut } from 'd3-ease' 
 import { packSiblings, packEnclose } from 'd3-hierarchy'
-import { line, area } from 'd3-shape'
 import throttle from './lib/throttle'
 
 var header = document.getElementById("header");
@@ -68,7 +63,7 @@ export function calcTargetYears(country, attr, target) {
 //   return colour;
 // }
 
-export function drawCircle(svg, data, title, el, containerWidth) {
+export function drawCircle(svg, data, title, el, containerWidth, int) {
   console.log(containerWidth);
   let mobile = containerWidth <= 740;
   let headerHeight = (header) ? header.clientHeight : 0;
@@ -76,28 +71,32 @@ export function drawCircle(svg, data, title, el, containerWidth) {
 
   let circles = packSiblings(data);
   let bigCircle = packEnclose(circles);
-  let totalEl = el.select(".count");
-  let tooltip = select(".tooltip");
+  let totalEl = el.select(".table-wrapper-" + int + " .count");
+  console.log(totalEl);
+  let tooltip = el.select(".tooltip");
 
   let incomeElObj = {
-    "Low income": el.select(".low"),
-    "Lower middle income": el.select(".lm"),
-    "Upper middle income": el.select(".um"),
-    "High income": el.select(".high")
+    "Low income": el.select(".table-wrapper-" + int).select(".low"),
+    "Lower middle income": el.select(".table-wrapper-" + int).select(".lm"),
+    "Upper middle income": el.select(".table-wrapper-" + int).select(".um"),
+    "High income": el.select(".table-wrapper-" + int).select(".high")
   };
 
-  svg.append("g").append("circle")
+  var group = svg.append("g");
+
+  group.append("g").append("circle")
     .attr("cx", bigCircle.x )
     .attr("cy", bigCircle.y )
     .attr("r", bigCircle.r )
     .style("fill", "#f6f6f6")
     .style("fill-opacity", "0.75");
 
-  if(mobile) {
+  if(int === 0) {
     svg.attr("height", ((bigCircle.r*2) + 48));
   }
 
-  let circleG = svg.append("g").selectAll("circle")
+  let circleG = group.append("g")
+    .selectAll("circle")
     .data(circles)
     .enter().append("circle")
       .attr("class", (d,i) => { return "country " + d.code3; })
@@ -131,7 +130,8 @@ export function drawCircle(svg, data, title, el, containerWidth) {
       })
     
 
-  let textG = svg.append("g").selectAll("text")
+  let textG = group.append("g")
+    .selectAll("text")
     .data(circles)
     .enter().append("text")
       .classed("circle-label", true)
@@ -159,7 +159,7 @@ export function drawCircle(svg, data, title, el, containerWidth) {
 
     console.log(isMobile, animated, title);
 
-    if((isMobile && !animated) || (!animated && (svg.node().getBoundingClientRect().bottom + 100 < screenHeight || svg.node().getBoundingClientRect().top < 0))) {
+    if(true || (isMobile && !animated) || (!animated && (svg.node().getBoundingClientRect().bottom + 100 < screenHeight || svg.node().getBoundingClientRect().top < 0))) {
       animated = true;
       circleG.transition()
         .ease(easeElasticOut)
@@ -193,583 +193,20 @@ export function drawCircle(svg, data, title, el, containerWidth) {
 
   if(!mobile) {
     doAnimation();
-    window.addEventListener("scroll", throttle(doAnimation, 100));
+    // window.addEventListener("scroll", throttle(doAnimation, 100));
   } else {
     doAnimation(true);
   }
 
-  svg.append("text")
-    .text(title)
-    .attr("y", (svg.attr("height")/2) - bigCircle.r - 12)
-    .attr("x", svg.attr("width")/2)
-    .style("text-anchor", "middle");
-
-  //position groups
-  svg.selectAll("g")
-    .style("transform", "translate(" + svg.attr("width")/2 + "px," + svg.attr("height")/2 + "px)");
-}
-
-export function drawBlockThree(svg, data, attr, targetLineLabel, targetLineYear, scaleSvg) {
-  let mobile = svg.attr("width") <= 740;
-
-  const margins = {
-    left: 60,
-    right: 0,
-    top: 12,
-    bottom: 12
-  }
-
-  const lineSpacing = (mobile) ? 15 : ((svg.attr("width") - margins.left)/data.length); 
-
-  if(mobile) {
-    let height = Math.max(window.innerHeight, 300) - margins.top - margins.bottom;
-    svg.attr("width", (data.length * 15) + margins.left + margins.right);
-    svg.attr("height", height);
-    scaleSvg.attr("height", height);
-  }
-
-  let sortedData = data.sort((a,b) => {
-    return Number(a[attr]) - Number(b[attr]);
-  }).map((country) => {
-    let before = calcBefore(country, data, attr);
-    let targetYears = calcTargetYears(country, attr, targetLineYear);
-    let educationLevel = (attr === "primary") ? "universal primary education" : "universal secondary education";
-    return {...country, before, educationLevel, targetYears};
-  });
-
-  let tooltip = select(".tooltip");
-
-  let scaleY = scaleLinear()
-    .domain([1970, 2100])
-    .range([margins.top, svg.attr("height") - margins.bottom]);
-
-  let axis = axisLeft(scaleY).tickFormat(format("d"));
-
-  scaleSvg.append("g")
-    .call(axis);
-
-  scaleSvg.selectAll(".tick line").attr("x2", 40).attr("x1", 0)
-    .style("stroke", "#e9e9e9")
-    .style("stroke-dasharray", ("1,1"));
-
-  scaleSvg.selectAll(".tick text").attr("x", 0)
-    .attr("dy", -4)
-    .style("text-anchor", "initial");
-
-  scaleSvg.selectAll(".domain").remove();
-
-  svg.append("g")
-    .call(axis);
-
-  svg.selectAll(".tick line").attr("x2", svg.attr("width")).attr("x1", 40)
-    .style("stroke", "#e9e9e9")
-    .style("stroke-dasharray", ("1,1"));
-
-  svg.selectAll(".tick text").remove();
-
-  svg.selectAll(".domain").remove();
-
-  svg.append("g")
-    .selectAll("line")
-    .data(sortedData)
-    .enter()
-    .append("line")
-      .attr("y1", (d) => {
-        return scaleY(targetLineYear);
-      })
-      .attr("x1", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .attr("y2", (d) => {
-        return scaleY(d[attr]);
-      })
-      .attr("x2", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .style("stroke", (d) => {
-        return "#f6f6f6";
-      })
-      .style("stroke-width", (lineSpacing-1) + "px")
-      .attr("data-code", d => d.code3);
-
-    var targetLineGroup = svg.append("g");
-    
-    targetLineGroup.append("line")
-      .attr("y1", scaleY(targetLineYear))
-      .attr("x1", 0)
-      .attr("y2", scaleY(targetLineYear))
-      .attr("x2", svg.attr("width"))
-      .style("stroke", "#bdbdbd")
-      .style("stroke-width", "1px")
-      .style("pointer-events", "none");
-    
-    if(mobile && attr === "primary") {
-      targetLineGroup.append("text")
-        .text(targetLineLabel)
-        .attr("y", scaleY(targetLineYear))
-        .attr("x", 55)
-        .attr("dy", -5)
-        // .style("text-anchor", "end")
-        .style("fill", "#bdbdbd")
-        .classed("target-line-label", true);
-    } else if(mobile) {
-      targetLineGroup.append("text")
-        .text(targetLineLabel)
-        .attr("y", scaleY(targetLineYear))
-        .attr("x", svg.attr("width") -10)
-        .attr("dy", 15)
-        .style("text-anchor", "end")
-        .style("fill", "#bdbdbd")
-        .classed("target-line-label", true);
-    } else {
-      targetLineGroup.append("text")
-        .text(targetLineLabel)
-        .attr("y", scaleY(targetLineYear))
-        .attr("x", svg.attr("width"))
-        .attr("dy", -5)
-        .style("text-anchor", "end")
-        .style("fill", "#bdbdbd")
-        .classed("target-line-label", true);
-    }
-
-    if(mobile) {
-      scaleSvg.append("line")
-        .attr("y1", scaleSvg.attr("height"))
-        .attr("x1", scaleSvg.attr("width")-1)
-        .attr("y2", 0)
-        .attr("x2", scaleSvg.attr("width")-1)
-        .style("stroke", "#e9e9e9")
-        .style("stroke-width", "1px")
-        .style("pointer-events", "none");
-    }
-
-    scaleSvg.append("line")
-      .attr("y1", scaleY(targetLineYear))
-      .attr("x1", 0)
-      .attr("y2", scaleY(targetLineYear))
-      .attr("x2", svg.attr("width"))
-      .style("stroke", "#bdbdbd")
-      .style("stroke-width", "1px")
-      .style("pointer-events", "none");
-
-    svg.append("g")
-      .selectAll("circle")
-      .data(sortedData)
-      .enter()
-      .append("circle")
-      .attr("cy", (d) => {
-        return scaleY(d[attr]);
-      })
-      .attr("cx", (d,i) => {
-        return margins.left + i*lineSpacing;
-      })
-      .attr("r", (lineSpacing/2 -1))
-      .style("stroke", (d) => {
-        return incomeColour(d.income);
-      })
-      .style("stroke-width", "1px")
-      .style("fill", (d) => {
-        return incomeColour(d.income);
-      })
-      .style("fill-opacity", 0.2);
-
-    if(mobile) {
-      svg.append("g")
-        .selectAll("text.label")
-        .data(sortedData)
-        .enter()
-        .append("text")
-          .attr("y", (d) => {
-            return scaleY(d[attr]);
-          })
-          .attr("x", (d,i) => {
-            return margins.left + i*lineSpacing;
-          })
-          .attr("dx", (d) => {
-            if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
-              return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) - 5;
-            } else {
-              return Number(scaleY(d[attr])) - Number(scaleY(targetLineYear)) + 5;
-            }
-          })
-          .text(d => d.country)
-          .style("fill", "#bdbdbd")
-          .style("dominant-baseline", "central")
-          .style("text-anchor", (d) => {
-            if(Number(scaleY(d[attr])) <= Number(scaleY(targetLineYear))) {
-              return "end";
-            } else {
-              return "start";
-            }
-          })
-          .attr("transform", (d,i) => {
-            return "rotate(-90," + (margins.left + i*lineSpacing) + "," + scaleY(d[attr]) + ")";
-          })
-          .attr("data-code", d => d.code3)
-          .classed("country-label", true)
-          // .style("display", "none");
-    }
-
-    svg.append("text")
-      .text("Years behind target")
-      .attr("x", svg.attr("width") - 40)
-      .attr("y", scaleY(targetLineYear + 30))
-      .style("text-anchor", "end")
-      .style("fill", "#767676")
-      .style("stroke", "#fff")
-      .style("stroke-width", "3px")
-      .classed("target-label", true);
-
-    svg.append("text")
-      .text("Years behind target")
-      .attr("x", svg.attr("width") - 40)
-      .attr("y", scaleY(targetLineYear + 30))
-      .style("text-anchor", "end")
-      .style("fill", "#767676")
-      .classed("target-label", true);
-
-    if(attr === "primary") {
-      svg.append("text")
-        .text("Years ahead of target")
-        .attr("x", 80)
-        .attr("y", scaleY("1995"))
-        .style("fill", "#767676")
-        .style("stroke", "#fff")
-        .style("stroke-width", "3px")
-        .classed("target-label", true);
-
-      svg.append("text")
-        .text("Years ahead of target")
-        .attr("x", 80)
-        .attr("y", scaleY("1995"))
-        .style("fill", "#767676")
-        .classed("target-label", true);
-    }
-
-    svg.append("g")
-      .selectAll("line")
-      .data(sortedData)
-      .enter()
-      .append("line")
-        .attr("y1", (d) => {
-          return svg.attr("height");
-        })
-        .attr("x1", (d,i) => {
-          return margins.left + i*lineSpacing;
-        })
-        .attr("y2", 0)
-        .attr("x2", (d,i) => {
-          return margins.left + i*lineSpacing;
-        })
-        .style("stroke", "#fff")
-        .style("stroke-opacity", 0)
-        .style("stroke-width", lineSpacing + "px")
-        .on("mouseover", function(d, i) {
-          let year = d[attr];
-          let achieveMessage = (Number(year) > targetLineYear) ? "Forecast to achieve" : "Achieved";
-
-          let yearsMessage = (d.targetYears > 0) ? "behind target" : "ahead of target";
-          let rect = svg.node().getBoundingClientRect();
-          let yDist = Number(scaleY(d[attr])) + Number(rect.top) - Number(svg.node().parentNode.parentNode.offsetParent.getBoundingClientRect().top) - 70;
-          let xDist = Number(rect.left) + Number(margins.left + i*lineSpacing);
-
-          tooltip.style("position", "absolute")
-            .style("display", "block")
-            .style("left", (xDist - 126) + "px")
-            .style("top", yDist + "px")
-            .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">${achieveMessage} ${d.educationLevel} in <b>${year}</b>, <b>${Math.abs(d.targetYears)} years</b> ${yearsMessage}</span>`);
-        });
-        
-    svg.on("mouseleave", function(d, i) {
-      tooltip.style("display", "none");
-    });
-
-  }
-
-export function drawInfantMortality(svg, data) {
-  const circleR = 5;
-  const lineSpacing = 48;
-  const marginTop = 40;
-
-  svg.style("margin-top", "24px").style("margin-bottom", "48px");
-
-  let scaleX = scaleLinear()
-    .domain([0, 100])
-    .range([5, svg.attr("width") - 5]);
-
-  let axis = axisTop(scaleX);
-
-  svg.append("g")
-    .call(axis)
-    .style("transform", "translateY(" + marginTop + "px)");
-  
-  svg.append("g").classed("tick", true)
-    .append("text")
-    .text("Deaths of children under 5 for every 1,000 live births, 2050")
-    .attr("x", 1)
-    .attr("y", 4)
-    .style("fill", "#767676")
-    .style("text-anchor", "start");
-
-  svg.selectAll(".tick line").attr("y2", svg.attr("height")).attr("y1", 0)
-    .style("stroke", "#e9e9e9")
-    .style("stroke-dasharray", ("1,1"));
-
-  svg.selectAll(".domain").remove();
-
-  let group = svg.append("g")
-    .selectAll("circle")
-    .data(data)
-    .enter();
-
-  group.append("line")
-    .attr("x1", d => scaleX(d.trend))
-    .attr("x2", d => scaleX(d.sdg))
-    .attr("y1", (d, i) => i * lineSpacing + 20 + marginTop)
-    .attr("y2", (d, i) => i * lineSpacing + 20 + marginTop)
-    .style("stroke", "#f6f6f6")
-    .style("stroke-width", "11px");
-
-  group.append("circle")
-    .attr("r", circleR)
-    .attr("cx", d => scaleX(d.trend))
-    .attr("cy", (d, i) => {
-      if(d.sdg === d.trend) {
-        return i * lineSpacing + 20 + marginTop + 2.5; 
-      }
-      return i * lineSpacing + 20 + marginTop; 
-    })
-    .style("fill", "#fff")
-    .style("stroke", "#cc2b12")
-    .style("stroke-width", "1px");
-
-  group.append("circle")
-    .attr("r", circleR)
-    .attr("cx", (d) => {
-      return scaleX(d.sdg)
-    })
-    .attr("cy", (d, i) => {
-      if(d.sdg === d.trend) {
-        return i * lineSpacing + 20 + marginTop - 2.5; 
-      }
-      return i * lineSpacing + 20 + marginTop; 
-    })
-    .style("fill", "#ffffff")
-    .style("stroke", "#63717a")
-    .style("stroke-width", "1px");
+  let offset = (int > 0) ? 1.5 : 0.5;
 
   group.append("text")
-    .text(d => d.country)
-    .attr("x", d => scaleX(d.trend))
-    .attr("y", (d, i) => i * lineSpacing + 20 + marginTop)
-    .attr("dx", 15)
-    .attr("dy", 5)
-    .style("fill", "#767676");
+    .text(title)
+    .attr("y", (svg.attr("height")/2) - bigCircle.r - 12)
+    .attr("x", ((svg.attr("width")/2)*offset))
+    .style("text-anchor", "middle");
 
-  let key = svg.append("g");
-
-  key.append("circle")
-    .attr("r", "5")
-    .attr("cx", 10)
-    .attr("cy", 0)
-    .style("fill", "#fff")
-    .style("stroke", "#cc2b12")
-    .style("stroke-width", "1px");
-
-  key.append("text")
-    .text("Trend")
-    .attr("x", 25)
-    .attr("y", 4)
-    .style("fill", "#767676")
-    .style("text-anchor", "start");
-
-  key.append("circle")
-    .attr("r", "5")
-    .attr("cx", 80)
-    .attr("cy", 0)
-    .style("fill", "#fff")
-    .style("stroke", "#63717a")
-    .style("stroke-width", "1px");
-
-  key.append("text")
-    .text("SDG 4.1 met")
-    .attr("x", 95)
-    .attr("y", 4)
-    .style("fill", "#767676")
-    .style("text-anchor", "start");
-
-  key.style("transform", "translateX(" + (Number(svg.attr("width")) - 174) + "px)");
-}
-
-export function drawPoverty(svg, data) {
-  svg.style("margin-top", "24px");
-
-  let margins = {
-    left: 40,
-    bottom: 20,
-    top: 20,
-    right: 0
-  };
-
-  var xScale = scaleLinear()
-    .domain([2020, 2060])
-    .range([margins.left, svg.attr("width") - margins.right]); 
-
-  var yScale = scaleLinear()
-    .domain([0,45])
-    .range([svg.attr("height") - margins.bottom, margins.top]);
-
-  let lineData = [];
-
-  for(var i = 1; i < data[0].length; i++) {
-    lineData.push({
-      "year": data[0][i],
-      "point": data[1][i],
-      "point2": data[2][i]
-    });
-  }
-
-  let axis = axisBottom(xScale).tickFormat(format("d"));
-  let axis2 = axisLeft(yScale);
-    
-  var genLine = line()
-    .x((d) => { return xScale(d.year); })
-    .y((d) => { return yScale(d.point); });
-
-  var genLine2 = line()
-    .x((d) => { return xScale(d.year); })
-    .y((d) => { return yScale(d.point2); });
-
-  var genArea = area()
-    .x((d) => { return xScale(d.year); })
-    .y0((d) => { return yScale(d.point); })
-    .y1((d) => { return yScale(d.point2); });
-
-  svg.append("path")
-    .attr("class", "area")
-    .attr("d", genArea(lineData))
-    .style("fill", "#f6f6f6")
-    .style("fill-opacity", "0.8");
-
-  svg.append("g").call(axis);
-
-  svg.selectAll(".tick line").attr("y2", svg.attr("height") - margins.bottom).attr("y1", margins.top)
-    .style("stroke", "#e9e9e9")
-    .style("stroke-dasharray", ("1,1"));
-
-  svg.selectAll(".tick text").attr("y", svg.attr("height") - margins.bottom + 10);
-
-  svg.select(".domain").remove();
-
-  svg.append("g").classed("left-axis", true).call(axis2).select(".domain").remove();
-
-  svg.selectAll(".left-axis .tick line").attr("x2", svg.attr("width")).attr("x1", 0)
-    .style("stroke", "#e9e9e9")
-    .style("stroke-dasharray", ("1,1"));
-
-  svg.selectAll(".left-axis .tick text")
-    .style("text-anchor", "start")
-    .attr("x", 0)
-    .attr("dy", -4);
-
-  svg.append("path")
-    .attr("class", "line")
-    .attr("d", genLine(lineData))
-    .style("stroke", "#cc2b12")
-    .style("stroke-width", "1px")
-    .style("fill", "none");
-
-  svg.append("path")
-    .attr("class", "line")
-    .attr("d", genLine2(lineData))
-    .style("stroke", "#484f53")
-    .style("stroke-width", "1px")
-    .style("fill", "none");
-
-  svg.select(".left-axis .tick:last-of-type text").html("45% of population living below national poverty line");
-
-  svg.append("g")
-    .append("line")
-    .attr("x1", xScale(2050))
-    .attr("x2", xScale(2050))
-    .attr("y1", yScale(9))
-    .attr("y2", yScale(2))
-    .style("stroke", "#767676")
-    .style("stroke-width", "1px");
-
-  svg.append("g")
-    .selectAll("circle")
-    .data(lineData)
-    .enter()
-    .append("circle")
-    .attr("r", 5)
-    .attr("cx", d => xScale(d.year))
-    .attr("cy", d => yScale(d.point2))
-    .style("fill", "#fff")
-    // .style("fill-opacity", 0.2)
-    .style("stroke", "#484f53")
-    .style("stroke-width", "1px");
-
-  svg.append("g")
-    .selectAll("circle")
-    .data(lineData)
-    .enter()
-    .append("circle")
-    .attr("r", 5)
-    .attr("cx", d => xScale(d.year))
-    .attr("cy", d => yScale(d.point))
-    .style("fill", "#fff")
-    // .style("fill-opacity", 0.2)
-    .style("stroke", "#cc2b12")
-    .style("stroke-width", "1px");
-
-  let tWrapper = svg.append("text")
-    .attr("x", xScale(2050))
-    .attr("y", 286)
-    .style("font-size", "12px");  
-
-  tWrapper.append("tspan").text("A 7% gap in 2050 if");
-  tWrapper.append("tspan").text("education goals aren't met").attr("dy", 13).attr("x", xScale(2050));
-
-  let key = svg.append("g").style("font-size", "12px");
-
-  key.append("circle")
-    .attr("r", "5")
-    .attr("cx", 30)
-    .attr("cy", 0)
-    .style("fill", "#fff")
-    .style("stroke", "#cc2b12")
-    .style("stroke-width", "1px");
-
-  key.append("text")
-    .text("Trend")
-    .attr("x", 40)
-    .attr("y", 4)
-    .style("fill", "#767676")
-    .style("text-anchor", "start");
-
-  key.append("circle")
-    .attr("r", "5")
-    .attr("cx", 95)
-    .attr("cy", 0)
-    .style("fill", "#fff")
-    .style("stroke", "#63717a")
-    .style("stroke-width", "1px");
-
-  key.append("text")
-    .text("SDG 4.1 met")
-    .attr("x", 105)
-    .attr("y", 4)
-    .style("fill", "#767676")
-    .style("text-anchor", "start");
-
-  key.style("transform", "translate(446px,12px)");
-
-  // svg.append("g").classed("tick", true)
-  //   .append("text")
-  //   .text("% of population living below national poverty line")
-  //   .attr("x", 20)
-  //   .attr("y", margins.top - 4)
-  //   .style("fill", "#767676")
-  //   .style("text-anchor", "start");
+  //position groups 
+  group.selectAll("g")
+    .style("transform", "translate(" + ((svg.attr("width")/2)*offset) + "px," + svg.attr("height")/2 + "px)");
 }
