@@ -39,14 +39,14 @@
 
 		table {
 			width: 100%;
-			max-width: 400px;
+			max-width: 300px;
 			text-align: left;
 			margin: auto;
 			margin-top: 12px;
 
 			th {
 				border-bottom: 1px solid #bdbdbd;
-				width: 25%;
+				width: 33%;
 				font-weight: 300;
 				color: #333;
 				padding: 0 !important;
@@ -171,4 +171,10 @@
 	@include fs-textSans(3);
 	line-height: 18px;
 	color: #767676;
+}
+
+.table-wrapper-1 {
+	.economic {
+		opacity: 0;
+	}
 }

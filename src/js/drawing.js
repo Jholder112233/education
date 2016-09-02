@@ -1,6 +1,6 @@
 import { select, selectAll, mouse } from 'd3-selection'
 import { transition } from 'd3-transition'
-import { easeElasticOut } from 'd3-ease' 
+import { easeElasticOut } from 'd3-ease'
 import { packSiblings, packEnclose } from 'd3-hierarchy'
 import throttle from './lib/throttle'
 
@@ -9,20 +9,17 @@ var header = document.getElementById("header");
 export function incomeColour(incomeGroup) {
   var colour;
   switch(incomeGroup) {
-    case "High income":
-        colour = "#005689";
+    case "a":
+        colour = "#39a4d8";
         break;
-    case "Upper middle income":
-        colour = "#4bc6df";
+    case "b":
+        colour = "#fdd09e";
         break;
-    case "Lower middle income":
-        colour = "#ffbb00";
-        break;
-    case "Low income":
-        colour = "#c05303";
+    case "c":
+        colour = "#ed3d61";
         break;
     default:
-        colour = "#767676";
+        colour = "#bdbdbd";
   }
   return colour;
 }
@@ -41,28 +38,6 @@ export function calcTargetYears(country, attr, target) {
   return years.toFixed(0);
 }
 
-
-// export function incomeColour(incomeGroup) {
-//   var colour;
-//   switch(incomeGroup) {
-//     case "High income":
-//         colour = "rgb(57, 164, 216)";
-//         break;
-//     case "Upper middle income":
-//         colour = "rgb(138, 199, 205)";
-//         break;
-//     case "Lower middle income":
-//         colour = "rgb(253, 208, 158)";
-//         break;
-//     case "Low income":
-//         colour = "rgb(237, 61, 97)";
-//         break;
-//     default:
-//         colour = "#767676";
-//   }
-//   return colour;
-// }
-
 export function drawCircle(svg, data, title, el, containerWidth, int) {
   console.log(containerWidth);
   let mobile = containerWidth <= 740;
@@ -76,10 +51,9 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
   let tooltip = el.select(".tooltip");
 
   let incomeElObj = {
-    "Low income": el.select(".table-wrapper-" + int).select(".low"),
-    "Lower middle income": el.select(".table-wrapper-" + int).select(".lm"),
-    "Upper middle income": el.select(".table-wrapper-" + int).select(".um"),
-    "High income": el.select(".table-wrapper-" + int).select(".high")
+    "c": el.select(".table-wrapper-" + int).select(".low"),
+    "b": el.select(".table-wrapper-" + int).select(".middle"),
+    "a": el.select(".table-wrapper-" + int).select(".high")
   };
 
   var group = svg.append("g");
@@ -128,7 +102,7 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
       .on("mouseout", function(d) {
         tooltip.style("display", "none");
       })
-    
+
 
   let textG = group.append("g")
     .selectAll("text")
@@ -206,7 +180,7 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
     .attr("x", ((svg.attr("width")/2)*offset))
     .style("text-anchor", "middle");
 
-  //position groups 
+  //position groups
   group.selectAll("g")
     .style("transform", "translate(" + ((svg.attr("width")/2)*offset) + "px," + svg.attr("height")/2 + "px)");
 }
