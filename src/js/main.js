@@ -11,8 +11,10 @@ import mainHTML from './text/main.html!text'
 
 export function init(el, context, config, mediator) {
   // iframeMessenger.enableAutoResize();
-  
+
   let parsedData = csvParse(data);
+  el.style.position = "initial";
+  select(document.body).append("div").classed("tooltip", true);
   el.innerHTML = mainHTML;
   render(el, parsedData)
 }
@@ -72,7 +74,7 @@ function render(el, data) {
       let before = calcBefore(country, data, "upperSecondary");
       let educationLevel = "universal secondary education";
       return {...country, r, before, educationLevel};
-    }); 
+    });
 
   // block 1
   if(el.getAttribute("data-alt") === "mdg") {

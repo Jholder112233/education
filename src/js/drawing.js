@@ -48,7 +48,7 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
   let bigCircle = packEnclose(circles);
   let totalEl = el.select(".table-wrapper-" + int + " .count");
   console.log(totalEl);
-  let tooltip = el.select(".tooltip");
+  let tooltip = select(".tooltip");
 
   let incomeElObj = {
     "c": el.select(".table-wrapper-" + int).select(".low"),
@@ -90,14 +90,15 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
         let year = (d.educationLevel === "universal secondary education") ? d.upperSecondary : d.primary;
         let achieveMessage = (Number(year) > 2015) ? "Forecast to achieve" : "Achieved";
 
-        let headerOffset = window.scrollY + Number(svg.node().parentNode.parentNode.offsetParent.getBoundingClientRect().top);
-        let verticalOffset = (Number(year) > 2015) ? event.pageY - 84 - headerOffset: event.pageY - 72 - headerOffset;
+        let headerOffset = 0;
+        let verticalOffset = (Number(year) > 2015) ? mouse(document.body)[1] - 84 - headerOffset: mouse(document.body)[1] - 72 - headerOffset;
 
         tooltip.style("position", "absolute")
           .style("display", "block")
-          .style("left", (event.pageX - 126) + "px")
+          .style("left", (Number(mouse(document.body)[0]) - 126) + "px")
           .style("top", verticalOffset + "px")
           .html(`<span class="tooltip__country">${d.country}</div><span class="tooltip__when">${achieveMessage} ${d.educationLevel} in <b>${year}</b>, before <b>${d.before}%</b> of the world</span>`);
+
       })
       .on("mouseout", function(d) {
         tooltip.style("display", "none");
@@ -156,7 +157,7 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
         .delay(function(d, i) { return ((i * 25) + 500 + 500)*duration; })
         .duration(300*duration)
         .style("opacity", (d) => {
-          if(d.r > 12) {
+          if(d.r > 11) {
             return 1;
           } else {
             return 0;
