@@ -162,10 +162,13 @@
 }
 
 .int-h1 {
-	@include fs-header(2);
+	@include fs-header(3);
+	font-weight: 600;
+	padding-bottom: 3px;
 }
 
 .int-h2 {
-	@include fs-bodyCopy(1);
+	@include fs-textSans(3);
+	line-height: 18px;
 	color: #767676;
 }
