@@ -14,7 +14,7 @@ import domReady from 'domready'
 
 export function init(el, context, config, mediator) {
   // iframeMessenger.enableAutoResize();
-  
+
   let parsedData = csvParse(data);
   el.innerHTML = mainHTML;
 
@@ -46,38 +46,16 @@ function render(el, data) {
     .attr("width", halfWidth)
     .attr("height", 500);
 
-  let svgThreeScale = select(".int-block-three .svg-one").append("svg")
-    .attr("width", 40)
-    .attr("height", 300)
-    .style("overflow", "visible")
-    // .style("margin-top", "24px")
-    .style("position", "absolute")
-    .style("z-index", "3")
-    .style("left", 0)
-    .style("top", 0)
-    .style("background-color", "#fff");
-
   let svgThree = select(".int-block-three .svg-one .svg-wrapper").append("svg")
-    .attr("width", fullWidth)
-    .attr("height", 300)
+    .attr("width", 620)
+    .attr("height", 2000)
     .style("overflow", "visible")
     // .style("margin-bottom", "24px")
     // .style("margin-top", "24px");
 
-  let svgFourScale = select(".int-block-three .svg-two").append("svg")
-    .attr("width", 40)
-    .attr("height", 300)
-    .style("overflow", "visible")
-    // .style("margin-top", "24px")
-    .style("position", "absolute")
-    .style("z-index", "3")
-    .style("left", 0)
-    .style("top", 0)
-    .style("background-color", "#fff");
-
   let svgFour = select(".int-block-three .svg-two .svg-wrapper").append("svg")
-    .attr("width", fullWidth)
-    .attr("height", 300)
+    .attr("width", 620)
+    .attr("height", 2000)
     .style("overflow", "visible")
     // .style("margin-bottom", "24px")
     // .style("margin-top", "24px");
@@ -136,7 +114,7 @@ function render(el, data) {
       let before = calcBefore(country, data, "upperSecondary");
       let educationLevel = "universal secondary education";
       return {...country, r, before, educationLevel};
-    }); 
+    });
 
   // block 1
   drawCircle(svgMet, mdgMet, "Met the MDG", select(".int-block-one .svg-one"), containerWidth);
@@ -147,8 +125,8 @@ function render(el, data) {
   drawCircle(svgSDGNotMeet, sdgNotMeet, "Forecast not to meet the SDG", select(".int-block-two .svg-two"), containerWidth);
 
   // block 3
-  drawBlockThree(svgThree, data, "primary", "Target year for universal primary education", 2015, svgThreeScale);
-  drawBlockThree(svgFour, data, "upperSecondary", "Target year for universal secondary education", 2030, svgFourScale);
+  drawBlockThree(svgThree, data, "primary", "Target year for universal primary education", 2015);
+  drawBlockThree(svgFour, data, "upperSecondary", "Target year for universal secondary education", 2030);
 
   // block 4
   drawInfantMortality(svgFive, csvParse(infantMortalityData));

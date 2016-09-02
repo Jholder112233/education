@@ -1,158 +1,158 @@
 country,primary,lowerSecondary,upperSecondary,code2,code3,population,income,continent
-China,2005,2035,2090,CN,CHN,1371220000,Upper middle income,East Asia & Pacific
-India,2050,2060,2085,IN,IND,1311050527,Lower middle income,South Asia
-United States of America,1970,2020,2040,US,USA,321418820,High income,North America
-Indonesia,2035,2055,2080,ID,IDN,257563815,Lower middle income,East Asia & Pacific
-Brazil,2040,2065,2095,BR,BRA,207847528,Upper middle income,Latin America & Caribbean
-Pakistan,2060,2070,2095,PK,PAK,188924874,Lower middle income,South Asia
-Nigeria,2070,2080,2100,NG,NGA,182201962,Lower middle income,Sub-Saharan Africa
-Bangladesh,2055,2075,2100,BD,BGD,160995642,Lower middle income,South Asia
-Russian Federation,1970,1980,2030,RU,RUS,144096812,Upper middle income,Europe & Central Asia
-Mexico,2035,2060,2100,MX,MEX,127017224,Upper middle income,Latin America & Caribbean
-Japan,1975,1990,2025,JP,JPN,126958472,High income,East Asia & Pacific
-Philippines,2040,2050,2060,PH,PHL,100699395,Lower middle income,East Asia & Pacific
-Ethiopia,2100,2100,2100,ET,ETH,99390750,Low income,Sub-Saharan Africa
-Viet Nam,2040,2060,2095,VN,VNM,91703800,Lower middle income,East Asia & Pacific
-Egypt,2040,2050,2065,EG,EGY,91508084,Lower middle income,Middle East & North Africa
-Germany,1970,2015,2050,DE,DEU,81413145,High income,Europe & Central Asia
-"Iran, Islamic Republic of",2035,2050,2075,IR,IRN,79109272,Upper middle income,Middle East & North Africa
-Turkey,2035,2060,2085,TR,TUR,78665830,Upper middle income,Europe & Central Asia
-Democratic Republic of the Congo,2075,2090,2100,CD,COD,77266814,Low income,Sub-Saharan Africa
-Thailand,2025,2055,2085,TH,THA,67959359,Upper middle income,East Asia & Pacific
-France,1980,2040,2050,FR,FRA,66808385,High income,Europe & Central Asia
-Italy,1985,2015,2070,IT,ITA,60802085,High income,Europe & Central Asia
-South Africa,2030,2050,2100,ZA,ZAF,54956920.37,Upper middle income,Sub-Saharan Africa
-Myanmar,2035,2065,2090,MM,MMR,53897154,Lower middle income,East Asia & Pacific
-United Republic of Tanzania,2080,2100,2100,TZ,TZA,53470420,Low income,Sub-Saharan Africa
-"Korea, Republic of",1985,2000,2010,KR,KOR,50617045,High income,East Asia & Pacific
-Colombia,2045,2065,2090,CO,COL,48228704,Upper middle income,Latin America & Caribbean
-Spain,2005,2035,2080,ES,ESP,46418269,High income,Europe & Central Asia
-Kenya,2065,2070,2100,KE,KEN,46050302,Lower middle income,Sub-Saharan Africa
-Ukraine,1970,1980,2035,UA,UKR,45198200,Lower middle income,Europe & Central Asia
-Argentina,2035,2065,2095,AR,ARG,43416755,Not classified,Latin America & Caribbean
-Sudan,2085,2090,2100,SD,SDN,40234882,Lower middle income,Sub-Saharan Africa
-Algeria,2035,2040,2080,DZ,DZA,39666519,Upper middle income,Middle East & North Africa
-Uganda,2090,2100,2100,UG,UGA,39032383,Low income,Sub-Saharan Africa
-Poland,1970,1970,2030,PL,POL,37999494,High income,Europe & Central Asia
-Iraq,2050,2070,2085,IQ,IRQ,36423395,Upper middle income,Middle East & North Africa
-Canada,1975,2000,2025,CA,CAN,35851774,High income,North America
-Morocco,2065,2080,2100,MA,MAR,34377511,Lower middle income,Middle East & North Africa
-Saudi Arabia,2030,2040,2065,SA,SAU,31540372,High income,Middle East & North Africa
-Peru,2040,2055,2075,PE,PER,31376670,Upper middle income,Latin America & Caribbean
-Venezuela,2045,2070,2100,VE,VEN,31108083,Upper middle income,Latin America & Caribbean
-Malaysia,2025,2030,2060,MY,MYS,30331007,Upper middle income,East Asia & Pacific
-Nepal,2050,2065,2090,NP,NPL,28513700,Low income,South Asia
-Mozambique,2100,2100,2100,MZ,MOZ,27977863,Low income,Sub-Saharan Africa
-Ghana,2065,2080,2100,GH,GHA,27409893,Lower middle income,Sub-Saharan Africa
-Madagascar,2095,2100,2100,MG,MDG,24235390,Low income,Sub-Saharan Africa
-Australia,1980,2020,2045,AU,AUS,23781169,High income,East Asia & Pacific
-Cameroon,2075,2100,2100,CM,CMR,23344179,Lower middle income,Sub-Saharan Africa
-Niger,2100,2100,2100,NE,NER,19899120,Low income,Sub-Saharan Africa
-Romania,1985,2030,2060,RO,ROU,19832389,Upper middle income,Europe & Central Asia
-Syrian Arab Republic,2060,2080,2100,SY,SYR,18502413,Lower middle income,Middle East & North Africa
-Burkina Faso,2100,2100,2100,BF,BFA,18105570,Low income,Sub-Saharan Africa
-Chile,2025,2045,2075,CL,CHL,17948141,High income,Latin America & Caribbean
-Mali,2100,2100,2100,ML,MLI,17599694,Low income,Sub-Saharan Africa
-Kazakhstan,1980,1985,2040,KZ,KAZ,17544126,Upper middle income,Europe & Central Asia
-Malawi,2080,2095,2100,MW,MWI,17215232,Low income,Sub-Saharan Africa
-Netherlands,2010,2030,2055,NL,NLD,16936520,High income,Europe & Central Asia
-Guatemala,2080,2095,2100,GT,GTM,16342897,Lower middle income,Latin America & Caribbean
-Zambia,2080,2095,2100,ZM,ZMB,16211767,Lower middle income,Sub-Saharan Africa
-Ecuador,2050,2075,2100,EC,ECU,16144363,Upper middle income,Latin America & Caribbean
-Zimbabwe,2045,2060,2090,ZW,ZWE,15602751,Low income,Sub-Saharan Africa
-Cambodia,2075,2085,2100,KH,KHM,15577899,Lower middle income,East Asia & Pacific
-Senegal,2095,2100,2100,SN,SEN,15129273,Low income,Sub-Saharan Africa
-Chad,2100,2100,2100,TD,TCD,14037472,Low income,Sub-Saharan Africa
-Guinea,2100,2100,2100,GN,GIN,12608590,Low income,Sub-Saharan Africa
-Rwanda,2100,2100,2100,RW,RWA,11609666,Low income,Sub-Saharan Africa
-Cuba,2000,2035,2085,CU,CUB,11389562,Upper middle income,Latin America & Caribbean
-Belgium,1995,2010,2045,BE,BEL,11285721,High income,Europe & Central Asia
-Burundi,2100,2100,2100,BI,BDI,11178921,Low income,Sub-Saharan Africa
-Tunisia,2025,2035,2090,TN,TUN,11107800,Lower middle income,Middle East & North Africa
-Benin,2085,2100,2100,BJ,BEN,10879829,Low income,Sub-Saharan Africa
-Greece,1990,2035,2055,GR,GRC,10823732,High income,Europe & Central Asia
-Somalia,2085,2100,2100,SO,SOM,10787104,Low income,Sub-Saharan Africa
-Haiti,2080,2090,2100,HT,HTI,10711067,Low income,Latin America & Caribbean
-Czech Republic,1970,1970,2025,CZ,CZE,10551219,High income,Europe & Central Asia
-Dominican Republic,2045,2055,2100,DO,DOM,10528391,Upper middle income,Latin America & Caribbean
-Portugal,2045,2055,2090,PT,PRT,10348648,High income,Europe & Central Asia
-Hungary,1975,1995,2050,HU,HUN,9844686,High income,Europe & Central Asia
-Sweden,1970,1990,2045,SE,SWE,9798871,High income,Europe & Central Asia
-Azerbaijan,1985,1995,2070,AZ,AZE,9651349,Upper middle income,Europe & Central Asia
-Belarus,1970,1985,2015,BY,BLR,9513000,Upper middle income,Europe & Central Asia
-United Arab Emirates,2025,2055,2085,AE,ARE,9156963,High income,Middle East & North Africa
-Austria,1970,1990,2050,AT,AUT,8611088,High income,Europe & Central Asia
-Tajikistan,1995,2035,2060,TJ,TJK,8481855,Lower middle income,Europe & Central Asia
-Switzerland,1970,1995,2045,CH,CHE,8286976,High income,Europe & Central Asia
-Honduras,2070,2100,2100,HN,HND,8075060,Lower middle income,Latin America & Caribbean
-Jordan,2030,2045,2070,JO,JOR,7594547,Upper middle income,Middle East & North Africa
-Bulgaria,1975,2030,2050,BG,BGR,7177991,Upper middle income,Europe & Central Asia
-Serbia,1980,2015,2050,RS,SRB,7098247,Upper middle income,Europe & Central Asia
-Lao People's Democratic Republic,2060,2075,2100,LA,LAO,6802023,Lower middle income,East Asia & Pacific
-Paraguay,2050,2075,2100,PY,PRY,6639123,Upper middle income,Latin America & Caribbean
-Sierra Leone,2095,2100,2100,SL,SLE,6453184,Low income,Sub-Saharan Africa
-El Salvador,2060,2075,2100,SV,SLV,6126583,Lower middle income,Latin America & Caribbean
-Nicaragua,2070,2090,2100,NI,NIC,6082032,Lower middle income,Latin America & Caribbean
-Kyrgyzstan,1980,1990,2035,KG,KGZ,5957000,Lower middle income,Europe & Central Asia
-Lebanon,2015,2045,2080,LB,LBN,5850743,Upper middle income,Middle East & North Africa
-Denmark,1970,1970,2050,DK,DNK,5676002,High income,Europe & Central Asia
-Singapore,2005,2015,2025,SG,SGP,5535002,High income,East Asia & Pacific
-Finland,1970,1970,2060,FI,FIN,5482013,High income,Europe & Central Asia
-Slovakia,1970,1970,2025,SK,SVK,5424050,High income,Europe & Central Asia
-Turkmenistan,1975,1985,2020,TM,TKM,5373502,Upper middle income,Europe & Central Asia
-Norway,1970,1970,2060,NO,NOR,5195921,High income,Europe & Central Asia
-Central African Republic,2100,2100,2100,CF,CAF,4900274,Low income,Sub-Saharan Africa
-Costa Rica,2045,2080,2100,CR,CRI,4807850,Upper middle income,Latin America & Caribbean
-Ireland,1970,2015,2050,IE,IRL,4640703,High income,Europe & Central Asia
-Congo,2075,2100,2100,CG,COG,4620330,Lower middle income,Sub-Saharan Africa
-New Zealand,1975,2015,2040,NZ,NZL,4595700,High income,East Asia & Pacific
-Liberia,2100,2100,2100,LR,LBR,4503438,Low income,Sub-Saharan Africa
-"Palestine, State of",2035,2050,2085,PS,PSE,4422143,Lower middle income,Middle East & North Africa
-Croatia,1985,1995,2045,HR,HRV,4224404,High income,Europe & Central Asia
-Panama,2040,2065,2095,PA,PAN,3929141,Upper middle income,Latin America & Caribbean
-Kuwait,2025,2060,2090,KW,KWT,3892115,High income,Middle East & North Africa
-Bosnia and Herzegovina,2000,2020,2050,BA,BIH,3810416,Upper middle income,Europe & Central Asia
-Georgia,1970,1990,2030,GE,GEO,3679000,Upper middle income,Europe & Central Asia
-"Moldova, Republic of",1980,1995,2075,MD,MDA,3554150,Lower middle income,Europe & Central Asia
-Puerto Rico,2000,2030,2050,PR,PRI,3474182,High income,Latin America & Caribbean
-Uruguay,2025,2070,2100,UY,URY,3431555,High income,Latin America & Caribbean
-Armenia,1975,1985,2030,AM,ARM,3017712,Lower middle income,Europe & Central Asia
-Mongolia,1990,2035,2060,MN,MNG,2959134,Lower middle income,East Asia & Pacific
-Lithuania,1975,1985,2040,LT,LTU,2910199,High income,Europe & Central Asia
-Albania,1980,2020,2090,AL,ALB,2889167,Upper middle income,Europe & Central Asia
-Jamaica,2005,2030,2100,JM,JAM,2725941,Upper middle income,Latin America & Caribbean
-Namibia,2060,2070,2100,NA,NAM,2458830,Upper middle income,Sub-Saharan Africa
-Qatar,2050,2070,2095,QA,QAT,2235355,High income,Middle East & North Africa
-Lesotho,2085,2100,2100,LS,LSO,2135022,Lower middle income,Sub-Saharan Africa
-Slovenia,1975,1990,2035,SI,SVN,2063768,High income,Europe & Central Asia
-Gambia,2070,2095,2100,GM,GMB,1990924,Low income,Sub-Saharan Africa
-Latvia,1970,1980,2045,LV,LVA,1978440,High income,Europe & Central Asia
-Guinea-Bissau,2085,2100,2100,GW,GNB,1844325,Low income,Sub-Saharan Africa
-Gabon,2065,2095,2100,GA,GAB,1725292,Upper middle income,Sub-Saharan Africa
-Bahrain,2015,2040,2075,BH,BHR,1377237,High income,Middle East & North Africa
-Trinidad and Tobago,2005,2040,2100,TT,TTO,1360088,High income,Latin America & Caribbean
-Estonia,1970,1985,2040,EE,EST,1311998,High income,Europe & Central Asia
-Swaziland,2070,2085,2100,SZ,SWZ,1286970,Lower middle income,Sub-Saharan Africa
-Mauritius,2055,2100,2100,MU,MUS,1262605,Upper middle income,Sub-Saharan Africa
-Timor-Leste,2060,2065,2090,TL,TLS,1245015,Lower middle income,East Asia & Pacific
-Cyprus,1985,2015,2040,CY,CYP,1165300,High income,Europe & Central Asia
-Equatorial Guinea,2045,2065,2100,GQ,GNQ,845060,Upper middle income,Sub-Saharan Africa
-Comoros,2090,2100,2100,KM,COM,788474,Low income,Sub-Saharan Africa
-Bhutan,2060,2075,2100,BT,BTN,774830,Lower middle income,South Asia
-Guyana,2020,2040,2095,GY,GUY,767085,Upper middle income,Latin America & Caribbean
-Montenegro,1980,2000,2050,ME,MNE,622388,Upper middle income,Europe & Central Asia
-Luxembourg,2015,2040,2070,LU,LUX,569676,High income,Europe & Central Asia
-Suriname,2025,2060,2100,SR,SUR,542975,Upper middle income,Latin America & Caribbean
-Cabo Verde,2065,2100,2100,CV,CPV,520502,Lower middle income,Sub-Saharan Africa
-Malta,1990,2005,2095,MT,MLT,431333,High income,Middle East & North Africa
-Maldives,2030,2060,2100,MV,MDV,409163,Upper middle income,South Asia
-Bahamas,2005,2035,2100,BS,BHS,388019,High income,Latin America & Caribbean
-Belize,2070,2095,2100,BZ,BLZ,359287,Upper middle income,Latin America & Caribbean
-Iceland,1970,2055,2065,IS,ISL,330823,High income,Europe & Central Asia
-Vanuatu,2070,2080,2100,VU,VUT,264652,Lower middle income,East Asia & Pacific
-Samoa,1990,2050,2090,WS,WSM,193228,Lower middle income,East Asia & Pacific
-Sao Tome and Principe,2085,2100,2100,ST,STP,190344,Lower middle income,Sub-Saharan Africa
-Saint Lucia,2005,2060,2100,LC,LCA,184999,Upper middle income,Latin America & Caribbean
-Saint Vincent and the Grenadines,2015,2075,2100,VC,VCT,109462,Upper middle income,Latin America & Caribbean
-Tonga,1985,2030,2085,TO,TON,106170,Lower middle income,East Asia & Pacific
-Aruba,2025,2065,2100,AW,ABW,103889,High income,Latin America & Caribbean
+China,2005,2035,2090,CN,CHN,1371220000,b,East Asia & Pacific
+India,2050,2060,2085,IN,IND,1311050527,b,South Asia
+US,1970,2020,2040,US,USA,321418820,a,North America
+Indonesia,2035,2055,2080,ID,IDN,257563815,b,East Asia & Pacific
+Brazil,2040,2065,2095,BR,BRA,207847528,b,Latin America & Caribbean
+Pakistan,2060,2070,2095,PK,PAK,188924874,b,South Asia
+Nigeria,2070,2080,2100,NG,NGA,182201962,b,Sub-Saharan Africa
+Bangladesh,2055,2075,2100,BD,BGD,160995642,b,South Asia
+Russia,1970,1980,2030,RU,RUS,144096812,b,Europe & Central Asia
+Mexico,2035,2060,2100,MX,MEX,127017224,b,Latin America & Caribbean
+Japan,1975,1990,2025,JP,JPN,126958472,a,East Asia & Pacific
+Philippines,2040,2050,2060,PH,PHL,100699395,b,East Asia & Pacific
+Ethiopia,2100,2100,2100,ET,ETH,99390750,c,Sub-Saharan Africa
+Vietnam,2040,2060,2095,VN,VNM,91703800,b,East Asia & Pacific
+Egypt,2040,2050,2065,EG,EGY,91508084,b,Middle East & North Africa
+Germany,1970,2015,2050,DE,DEU,81413145,a,Europe & Central Asia
+Iran,2035,2050,2075,IR,IRN,79109272,b,Middle East & North Africa
+Turkey,2035,2060,2085,TR,TUR,78665830,b,Europe & Central Asia
+DR Congo,2075,2090,2100,CD,COD,77266814,c,Sub-Saharan Africa
+Thailand,2025,2055,2085,TH,THA,67959359,b,East Asia & Pacific
+France,1980,2040,2050,FR,FRA,66808385,a,Europe & Central Asia
+Italy,1985,2015,2070,IT,ITA,60802085,a,Europe & Central Asia
+South Africa,2030,2050,2100,ZA,ZAF,54956920.37,b,Sub-Saharan Africa
+Myanmar,2035,2065,2090,MM,MMR,53897154,b,East Asia & Pacific
+Tanzania,2080,2100,2100,TZ,TZA,53470420,c,Sub-Saharan Africa
+South Korea,1985,2000,2010,KR,KOR,50617045,a,East Asia & Pacific
+Colombia,2045,2065,2090,CO,COL,48228704,b,Latin America & Caribbean
+Spain,2005,2035,2080,ES,ESP,46418269,a,Europe & Central Asia
+Kenya,2065,2070,2100,KE,KEN,46050302,b,Sub-Saharan Africa
+Ukraine,1970,1980,2035,UA,UKR,45198200,b,Europe & Central Asia
+Argentina,2035,2065,2095,AR,ARG,43416755,a,Latin America & Caribbean
+Sudan,2085,2090,2100,SD,SDN,40234882,b,Sub-Saharan Africa
+Algeria,2035,2040,2080,DZ,DZA,39666519,b,Middle East & North Africa
+Uganda,2090,2100,2100,UG,UGA,39032383,c,Sub-Saharan Africa
+Poland,1970,1970,2030,PL,POL,37999494,a,Europe & Central Asia
+Iraq,2050,2070,2085,IQ,IRQ,36423395,b,Middle East & North Africa
+Canada,1975,2000,2025,CA,CAN,35851774,a,North America
+Morocco,2065,2080,2100,MA,MAR,34377511,b,Middle East & North Africa
+Saudi Arabia,2030,2040,2065,SA,SAU,31540372,a,Middle East & North Africa
+Peru,2040,2055,2075,PE,PER,31376670,b,Latin America & Caribbean
+Venezuela,2045,2070,2100,VE,VEN,31108083,b,Latin America & Caribbean
+Malaysia,2025,2030,2060,MY,MYS,30331007,b,East Asia & Pacific
+Nepal,2050,2065,2090,NP,NPL,28513700,c,South Asia
+Mozambique,2100,2100,2100,MZ,MOZ,27977863,c,Sub-Saharan Africa
+Ghana,2065,2080,2100,GH,GHA,27409893,b,Sub-Saharan Africa
+Madagascar,2095,2100,2100,MG,MDG,24235390,c,Sub-Saharan Africa
+Australia,1980,2020,2045,AU,AUS,23781169,a,East Asia & Pacific
+Cameroon,2075,2100,2100,CM,CMR,23344179,b,Sub-Saharan Africa
+Niger,2100,2100,2100,NE,NER,19899120,c,Sub-Saharan Africa
+Romania,1985,2030,2060,RO,ROU,19832389,b,Europe & Central Asia
+Syria,2060,2080,2100,SY,SYR,18502413,b,Middle East & North Africa
+Burkina Faso,2100,2100,2100,BF,BFA,18105570,c,Sub-Saharan Africa
+Chile,2025,2045,2075,CL,CHL,17948141,a,Latin America & Caribbean
+Mali,2100,2100,2100,ML,MLI,17599694,c,Sub-Saharan Africa
+Kazakhstan,1980,1985,2040,KZ,KAZ,17544126,b,Europe & Central Asia
+Malawi,2080,2095,2100,MW,MWI,17215232,c,Sub-Saharan Africa
+Netherlands,2010,2030,2055,NL,NLD,16936520,a,Europe & Central Asia
+Guatemala,2080,2095,2100,GT,GTM,16342897,b,Latin America & Caribbean
+Zambia,2080,2095,2100,ZM,ZMB,16211767,b,Sub-Saharan Africa
+Ecuador,2050,2075,2100,EC,ECU,16144363,b,Latin America & Caribbean
+Zimbabwe,2045,2060,2090,ZW,ZWE,15602751,c,Sub-Saharan Africa
+Cambodia,2075,2085,2100,KH,KHM,15577899,b,East Asia & Pacific
+Senegal,2095,2100,2100,SN,SEN,15129273,c,Sub-Saharan Africa
+Chad,2100,2100,2100,TD,TCD,14037472,c,Sub-Saharan Africa
+Guinea,2100,2100,2100,GN,GIN,12608590,c,Sub-Saharan Africa
+Rwanda,2100,2100,2100,RW,RWA,11609666,c,Sub-Saharan Africa
+Cuba,2000,2035,2085,CU,CUB,11389562,b,Latin America & Caribbean
+Belgium,1995,2010,2045,BE,BEL,11285721,a,Europe & Central Asia
+Burundi,2100,2100,2100,BI,BDI,11178921,c,Sub-Saharan Africa
+Tunisia,2025,2035,2090,TN,TUN,11107800,b,Middle East & North Africa
+Benin,2085,2100,2100,BJ,BEN,10879829,c,Sub-Saharan Africa
+Greece,1990,2035,2055,GR,GRC,10823732,a,Europe & Central Asia
+Somalia,2085,2100,2100,SO,SOM,10787104,c,Sub-Saharan Africa
+Haiti,2080,2090,2100,HT,HTI,10711067,c,Latin America & Caribbean
+Czech Republic,1970,1970,2025,CZ,CZE,10551219,a,Europe & Central Asia
+Dominican Republic,2045,2055,2100,DO,DOM,10528391,b,Latin America & Caribbean
+Portugal,2045,2055,2090,PT,PRT,10348648,a,Europe & Central Asia
+Hungary,1975,1995,2050,HU,HUN,9844686,a,Europe & Central Asia
+Sweden,1970,1990,2045,SE,SWE,9798871,a,Europe & Central Asia
+Azerbaijan,1985,1995,2070,AZ,AZE,9651349,b,Europe & Central Asia
+Belarus,1970,1985,2015,BY,BLR,9513000,b,Europe & Central Asia
+UAE,2025,2055,2085,AE,ARE,9156963,a,Middle East & North Africa
+Austria,1970,1990,2050,AT,AUT,8611088,a,Europe & Central Asia
+Tajikistan,1995,2035,2060,TJ,TJK,8481855,b,Europe & Central Asia
+Switzerland,1970,1995,2045,CH,CHE,8286976,a,Europe & Central Asia
+Honduras,2070,2100,2100,HN,HND,8075060,b,Latin America & Caribbean
+Jordan,2030,2045,2070,JO,JOR,7594547,b,Middle East & North Africa
+Bulgaria,1975,2030,2050,BG,BGR,7177991,b,Europe & Central Asia
+Serbia,1980,2015,2050,RS,SRB,7098247,b,Europe & Central Asia
+Laos,2060,2075,2100,LA,LAO,6802023,b,East Asia & Pacific
+Paraguay,2050,2075,2100,PY,PRY,6639123,b,Latin America & Caribbean
+Sierra Leone,2095,2100,2100,SL,SLE,6453184,c,Sub-Saharan Africa
+El Salvador,2060,2075,2100,SV,SLV,6126583,b,Latin America & Caribbean
+Nicaragua,2070,2090,2100,NI,NIC,6082032,b,Latin America & Caribbean
+Kyrgyzstan,1980,1990,2035,KG,KGZ,5957000,b,Europe & Central Asia
+Lebanon,2015,2045,2080,LB,LBN,5850743,b,Middle East & North Africa
+Denmark,1970,1970,2050,DK,DNK,5676002,a,Europe & Central Asia
+Singapore,2005,2015,2025,SG,SGP,5535002,a,East Asia & Pacific
+Finland,1970,1970,2060,FI,FIN,5482013,a,Europe & Central Asia
+Slovakia,1970,1970,2025,SK,SVK,5424050,a,Europe & Central Asia
+Turkmenistan,1975,1985,2020,TM,TKM,5373502,b,Europe & Central Asia
+Norway,1970,1970,2060,NO,NOR,5195921,a,Europe & Central Asia
+CAR,2100,2100,2100,CF,CAF,4900274,c,Sub-Saharan Africa
+Costa Rica,2045,2080,2100,CR,CRI,4807850,b,Latin America & Caribbean
+Ireland,1970,2015,2050,IE,IRL,4640703,a,Europe & Central Asia
+Congo-Brazzaville,2075,2100,2100,CG,COG,4620330,b,Sub-Saharan Africa
+New Zealand,1975,2015,2040,NZ,NZL,4595700,a,East Asia & Pacific
+Liberia,2100,2100,2100,LR,LBR,4503438,c,Sub-Saharan Africa
+Palestine,2035,2050,2085,PS,PSE,4422143,b,Middle East & North Africa
+Croatia,1985,1995,2045,HR,HRV,4224404,a,Europe & Central Asia
+Panama,2040,2065,2095,PA,PAN,3929141,b,Latin America & Caribbean
+Kuwait,2025,2060,2090,KW,KWT,3892115,a,Middle East & North Africa
+Bosnia and Herzegovina,2000,2020,2050,BA,BIH,3810416,b,Europe & Central Asia
+Georgia,1970,1990,2030,GE,GEO,3679000,b,Europe & Central Asia
+Moldova,1980,1995,2075,MD,MDA,3554150,b,Europe & Central Asia
+Puerto Rico,2000,2030,2050,PR,PRI,3474182,a,Latin America & Caribbean
+Uruguay,2025,2070,2100,UY,URY,3431555,a,Latin America & Caribbean
+Armenia,1975,1985,2030,AM,ARM,3017712,b,Europe & Central Asia
+Mongolia,1990,2035,2060,MN,MNG,2959134,b,East Asia & Pacific
+Lithuania,1975,1985,2040,LT,LTU,2910199,a,Europe & Central Asia
+Albania,1980,2020,2090,AL,ALB,2889167,b,Europe & Central Asia
+Jamaica,2005,2030,2100,JM,JAM,2725941,b,Latin America & Caribbean
+Namibia,2060,2070,2100,NA,NAM,2458830,b,Sub-Saharan Africa
+Qatar,2050,2070,2095,QA,QAT,2235355,a,Middle East & North Africa
+Lesotho,2085,2100,2100,LS,LSO,2135022,b,Sub-Saharan Africa
+Slovenia,1975,1990,2035,SI,SVN,2063768,a,Europe & Central Asia
+Gambia,2070,2095,2100,GM,GMB,1990924,c,Sub-Saharan Africa
+Latvia,1970,1980,2045,LV,LVA,1978440,a,Europe & Central Asia
+Guinea-Bissau,2085,2100,2100,GW,GNB,1844325,c,Sub-Saharan Africa
+Gabon,2065,2095,2100,GA,GAB,1725292,b,Sub-Saharan Africa
+Bahrain,2015,2040,2075,BH,BHR,1377237,a,Middle East & North Africa
+Trinidad and Tobago,2005,2040,2100,TT,TTO,1360088,a,Latin America & Caribbean
+Estonia,1970,1985,2040,EE,EST,1311998,a,Europe & Central Asia
+Swaziland,2070,2085,2100,SZ,SWZ,1286970,b,Sub-Saharan Africa
+Mauritius,2055,2100,2100,MU,MUS,1262605,b,Sub-Saharan Africa
+Timor-Leste,2060,2065,2090,TL,TLS,1245015,b,East Asia & Pacific
+Cyprus,1985,2015,2040,CY,CYP,1165300,a,Europe & Central Asia
+Equatorial Guinea,2045,2065,2100,GQ,GNQ,845060,b,Sub-Saharan Africa
+Comoros,2090,2100,2100,KM,COM,788474,c,Sub-Saharan Africa
+Bhutan,2060,2075,2100,BT,BTN,774830,b,South Asia
+Guyana,2020,2040,2095,GY,GUY,767085,b,Latin America & Caribbean
+Montenegro,1980,2000,2050,ME,MNE,622388,b,Europe & Central Asia
+Luxembourg,2015,2040,2070,LU,LUX,569676,a,Europe & Central Asia
+Suriname,2025,2060,2100,SR,SUR,542975,b,Latin America & Caribbean
+Cape Verde,2065,2100,2100,CV,CPV,520502,b,Sub-Saharan Africa
+Malta,1990,2005,2095,MT,MLT,431333,a,Middle East & North Africa
+Maldives,2030,2060,2100,MV,MDV,409163,b,South Asia
+Bahamas,2005,2035,2100,BS,BHS,388019,a,Latin America & Caribbean
+Belize,2070,2095,2100,BZ,BLZ,359287,b,Latin America & Caribbean
+Iceland,1970,2055,2065,IS,ISL,330823,a,Europe & Central Asia
+Vanuatu,2070,2080,2100,VU,VUT,264652,b,East Asia & Pacific
+Samoa,1990,2050,2090,WS,WSM,193228,b,East Asia & Pacific
+Sao Tome and Principe,2085,2100,2100,ST,STP,190344,b,Sub-Saharan Africa
+Saint Lucia,2005,2060,2100,LC,LCA,184999,b,Latin America & Caribbean
+Saint Vincent and the Grenadines,2015,2075,2100,VC,VCT,109462,b,Latin America & Caribbean
+Tonga,1985,2030,2085,TO,TON,106170,b,East Asia & Pacific
+Aruba,2025,2065,2100,AW,ABW,103889,a,Latin America & Caribbean
