@@ -39,15 +39,13 @@ export function calcTargetYears(country, attr, target) {
 }
 
 export function drawCircle(svg, data, title, el, containerWidth, int) {
-  console.log(containerWidth);
-  let mobile = containerWidth <= 740;
+  let mobile = containerWidth <= 620;
   let headerHeight = (header) ? header.clientHeight : 0;
   const padding = 1.5;
 
   let circles = packSiblings(data);
   let bigCircle = packEnclose(circles);
   let totalEl = el.select(".table-wrapper-" + int + " .count");
-  console.log(totalEl);
   let tooltip = select(".tooltip");
 
   let incomeElObj = {
@@ -128,13 +126,7 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
   function doAnimation(isMobile) {
     var duration = 1;
 
-    if(isMobile === true) {
-      duration = 0;
-    }
-
-    console.log(isMobile, animated, title);
-
-    if(true || (isMobile && !animated) || (!animated && (svg.node().getBoundingClientRect().bottom + 100 < screenHeight || svg.node().getBoundingClientRect().top < 0))) {
+    if(!animated && (svg.node().getBoundingClientRect().bottom < screenHeight || svg.node().getBoundingClientRect().top < 0)) {
       animated = true;
       circleG.transition()
         .ease(easeElasticOut)
@@ -166,12 +158,9 @@ export function drawCircle(svg, data, title, el, containerWidth, int) {
     }
   }
 
-  if(!mobile) {
-    doAnimation();
-    // window.addEventListener("scroll", throttle(doAnimation, 100));
-  } else {
-    doAnimation(true);
-  }
+  window.addEventListener("scroll", throttle(doAnimation, 100));
+
+  doAnimation();
 
   let offset = (int > 0) ? 1.5 : 0.5;
 

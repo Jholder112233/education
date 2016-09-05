@@ -5,6 +5,16 @@
 @import "general";
 @import "share";
 
+.low {
+	color: #ed3d61;
+}
+.middle {
+	color: #fdd09e;
+}
+.high {
+	color: #39a4d8;
+}
+
 .element-interactive {
 	@include fs-textSans(3);
 	overflow-x: hidden;
@@ -176,5 +186,16 @@
 .table-wrapper-1 {
 	.economic {
 		opacity: 0;
+	}
+}
+
+.mobile-width {
+	.table-wrapper {
+		width: 100% !important;
+		float: initial !important;
+
+		table {
+			display: none;
+		}
 	}
 }
