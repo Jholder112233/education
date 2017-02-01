@@ -28,9 +28,9 @@ define([], function() {
             } else {
                 var iframeUrl = "";
                 if(el.getAttribute("data-alt") === "mdg") {
-                  iframeUrl = "https://interactive.guim.co.uk/uploader/embed/2016/09/archive-zip/giv-31075J3csoQw7UUfT/";
+                  iframeUrl = "https://interactive.guim.co.uk/uploader/embed/2016/09/archive-4-zip/giv-310753W7Nyc9H4tkL/";
                 } else {
-                  iframeUrl = "https://interactive.guim.co.uk/uploader/embed/2016/09/archive-zip/giv-31075Ek025A9BxqVR/";
+                  iframeUrl = "https://interactive.guim.co.uk/uploader/embed/2016/09/archive-2-zip/giv-31075XwB0iPRQxb5c/";
                 }
 
                 el.innerHTML = '<iframe height="1064" src="' + iframeUrl + '" style="width: 100%; border: none;"></iframe></figure>';

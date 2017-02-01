@@ -12,7 +12,7 @@ import throttle from './lib/throttle'
 
 export function init(el, context, config, mediator) {
   // iframeMessenger.enableAutoResize();
-
+  console.log("v2");
   let parsedData = csvParse(data);
   el.style.position = "initial";
   select(document.body).append("div").classed("tooltip", true);
@@ -80,15 +80,15 @@ export function init(el, context, config, mediator) {
 
     // block 1
     if(el.getAttribute("data-alt") === "mdg") {
-      select(el).select(".int-h1").text("Which countries met Millenium Development Goal 4.1?");
-      select(el).select(".int-h2").html('Less than half of all countries achieved universal primary education by 2015, but over 80% high income countries met the goal. Countries are <b>sized according to their population</b> and coloured by their status as either a <b class="high">high income</b>, <b class="middle">middle income</b> or <b class="low">low income</b> country</p>');
-      drawCircle(svgMet, mdgNotMet, "Did not meet the MDG", select(el), containerWidth, 0);
-      drawCircle(svgMet, mdgMet, "Met the MDG", select(el), containerWidth, 1);
+      select(el).select(".int-h1").text("Which countries met millennium development goal 2?");
+      select(el).select(".int-h2").html('Less than half of all countries achieved universal primary education by 2015, but more than 80% of high income countries met the goal. Countries are <b>sized according to their population</b> and coloured by their status as either <b class="high">high income</b>, <b class="middle">middle income</b> or <b class="low">low income</b></p>');
+      drawCircle(svgMet, mdgNotMet, "Did not meet MDG 2", select(el), containerWidth, 0);
+      drawCircle(svgMet, mdgMet, "Met MDG 2", select(el), containerWidth, 1);
     } else {
-      select(el).select(".int-h1").text("Which countries are forecast to meet Sustainable Development Goal 4.1?");
-      select(el).select(".int-h2").html('Just 12 countries are expected to achieve universal upper-secondary education by 2030, with no low income countries amongst them. Countries are <b>sized according to their population</b> and coloured by their status as either a <b class="high">high income</b>, <b class="middle">middle income</b> or <b class="low">low income</b> country</p>');
-      drawCircle(svgMet, sdgNotMeet, "Won't meet the SDG", select(el), containerWidth, 0);
-      drawCircle(svgMet, sdgMeet, "Will meet the SDG", select(el), containerWidth, 1);
+      select(el).select(".int-h1").text("Which countries are forecast to meet sustainable development goal 4?");
+      select(el).select(".int-h2").html('Just 12 countries are expected to achieve universal primary and secondary education by 2030, with no low income countries among them. Countries are <b>sized according to their population</b> and coloured by their status as either <b class="high">high income</b>, <b class="middle">middle income</b> or <b class="low">low income</b></p>');
+      drawCircle(svgMet, sdgNotMeet, "Won't meet SDG 4", select(el), containerWidth, 0);
+      drawCircle(svgMet, sdgMeet, "Will meet SDG 4", select(el), containerWidth, 1);
     }
   }
 }

@@ -5,6 +5,10 @@
 @import "general";
 @import "share";
 
+body {
+    overflow-x: hidden;
+}
+
 .low {
 	color: #ed3d61;
 }
